@@ -8,8 +8,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <ProjectGuid>{3D8F4138-9D8E-FCF6-995E-1E9FFF31F647}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -115,14 +114,9 @@
     <Compile Include="Library\PackageCache\com.unity.textmeshpro@3.0.6\Scripts\Runtime\MaterialReferenceManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="Library\PackageCache\com.unity.textmeshpro@3.0.6\Scripts\Runtime\Unity.TextMeshPro.asmdef" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="NSubstitute, Version=4.3.0.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
-      <HintPath>packages\NSubstitute.4.3.0\lib\net46\NSubstitute.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2020.3.25f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\Variations\mono\Managed\UnityEngine.dll</HintPath>
     </Reference>
@@ -323,6 +317,9 @@
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@2.0.0\Runtime\AOT\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NSubstitute">
+      <HintPath>Assets\Plugins\NSubstitute\NSubstitute.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2020.3.25f1\Editor\Data\NetStandard\ref\2.0.0\netstandard.dll</HintPath>
@@ -675,10 +672,6 @@
       <Project>{2683067A-0577-6A46-0B1C-D6A022F1C903}</Project>
       <Name>UnityEngine.UI</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="packages\NSubstitute.Analyzers.CSharp.1.0.15\analyzers\dotnet\cs\NSubstitute.Analyzers.CSharp.dll" />
-    <Analyzer Include="packages\NSubstitute.Analyzers.CSharp.1.0.15\analyzers\dotnet\cs\NSubstitute.Analyzers.Shared.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

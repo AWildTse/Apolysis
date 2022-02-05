@@ -53,10 +53,10 @@
     <UnityVersion>2020.3.25f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Editor\FirstPersonControllerTests.cs" />
     <Compile Include="Assets\Scripts\Editor\HealthTests.cs" />
     <Compile Include="Assets\Scripts\Editor\PlayerTests.cs" />
     <Compile Include="Assets\Scripts\Editor\StaminaTests.cs" />
-    <Compile Include="Assets\Scripts\Editor\FirstPersonControllerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
