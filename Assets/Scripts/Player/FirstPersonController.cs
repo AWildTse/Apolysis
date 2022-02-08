@@ -7,6 +7,7 @@ namespace Editor
     public class FirstPersonController : MonoBehaviour
     {
         public bool CanMove { get; private set; } = true;
+        public bool IsMoving { get; private set; } = true;
         public bool CanJump { get; private set; } = true;
 
         public IUnityService UnityService;
@@ -39,6 +40,7 @@ namespace Editor
         private float yRotation;
 
         private GameObject Character;
+        private Rigidbody rigidbody;
 
         //Sprint Stamina Check Variables
         private bool _staminaThresholdCheck = false;
@@ -56,6 +58,7 @@ namespace Editor
         void Start()
         {
             Player = new Player(_currentHP, _maximumHP, _currentSP, _maximumSP, _walkingS, _runningS);
+            rigidbody = new GameObject().AddComponent<Rigidbody>();
 
             Player.Healed += (sender, args) => UIElements._healthBar.ReplenishHealth(args.Amount);
             Player.Damaged += (sender, args) => UIElements._healthBar.DepleteHealth(args.Amount);
@@ -70,10 +73,12 @@ namespace Editor
         // Update is called once per frame
         void Update()
         {
+            IsMoving = true;
+
             if (CanMove)
             {
-                HandlePlayerMovement();
                 HandleMouseMovement();
+                HandlePlayerMovement();
             }
             TestHPAndSPBars();
         }
@@ -141,20 +146,26 @@ namespace Editor
             {
                 Player.Sprint(_staminaDepleteAmount);
                 transform.position += ReturnPosition(_runningS);
+                IsMoving = true;
             }
             else if (IsActionAllowed(currentStamina, thresholdCheck, threshold) == false)
             {
                 Player.Rest(_staminaRestoreAmount);
                 transform.position += ReturnPosition(_walkingS);
+                IsMoving = true;
+
             }
             else if (currentStamina == maxStamina)
             {
                 transform.position += ReturnPosition(_walkingS);
+                IsMoving = true;
+
             }
             else if (IsActionAllowed(currentStamina, thresholdCheck, threshold) == true)
             {
                 Player.Rest(_staminaRestoreAmount);
                 transform.position += ReturnPosition(_walkingS);
+                IsMoving = true;
             }
         }
 
@@ -162,6 +173,7 @@ namespace Editor
         {
             //We simply have a method that returns another method to keep our code looking clean.
             //Having to write this blob down is bad for readability
+            
             return CalculateMovement(
                     UnityService.GetAxisRaw("Horizontal"),
                     UnityService.GetAxisRaw("Vertical"),
