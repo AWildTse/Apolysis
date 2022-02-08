@@ -5,19 +5,25 @@ namespace Editor.Infrastructure
 {
     public class PlayerBuilder : TestDataBuilder<Player>
     {
-        private float _speed;
+        private float _currentHealth;
+        private float _maximumHealth;
+        private float _currentStamina;
+        private float _maximumStamina;
 
         public PlayerBuilder()
         {
         }
 
-        public PlayerBuilder(float speed)
+        public PlayerBuilder(float currentHealth, float maximumHealth, float currentStamina, float maximumStamina)
         {
-            _speed = speed;
+            _currentHealth = currentHealth;
+            _maximumHealth = maximumHealth;
+            _currentStamina = currentStamina;
+            _maximumStamina = maximumStamina;
         }
         public override Player Build()
         {
-            return new Player();
+            return new GameObject().AddComponent<Player>();
         }
     }
 }

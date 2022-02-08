@@ -7,6 +7,7 @@ namespace Editor
     public class FirstPersonController : MonoBehaviour
     {
         public bool CanMove { get; private set; } = true;
+        public bool CanJump { get; private set; } = true;
 
         public IUnityService UnityService;
         private Player Player;
@@ -54,13 +55,13 @@ namespace Editor
         // Start is called before the first frame update
         void Start()
         {
-            Player = new Player(100, 100, 100, 100, 4, 2);
+            Player = new Player(_currentHP, _maximumHP, _currentSP, _maximumSP, _walkingS, _runningS);
 
             Player.Healed += (sender, args) => UIElements._healthBar.ReplenishHealth(args.Amount);
             Player.Damaged += (sender, args) => UIElements._healthBar.DepleteHealth(args.Amount);
             Player.Rested += (sender, args) => UIElements._staminaBar.RestoreStamina(args.Amount);
             Player.Sprinted += (sender, args) => UIElements._staminaBar.DepleteStamina(args.Amount);
-            Player = new Player(_currentHP, _maximumHP, _currentSP, _maximumSP, _walkingS, _runningS);
+
 
             if (UnityService == null)
                 UnityService = new UnityService();
@@ -69,33 +70,26 @@ namespace Editor
         // Update is called once per frame
         void Update()
         {
-            PlayerController();
+            if (CanMove)
+            {
+                HandlePlayerMovement();
+                HandleMouseMovement();
+            }
+            TestHPAndSPBars();
         }
 
-        public void PlayerController()
+        public void HandleMouseMovement()
+        {
+            Character.transform.eulerAngles = CalculateMouseMovement(
+                    UnityService.GetAxisRaw("Mouse X"),
+                    UnityService.GetAxisRaw("Mouse Y"),
+                    _horizontalMouseSpeed,
+                    _verticalMouseSpeed);
+        }
+
+        public void HandlePlayerMovement()
         {
             DecideSpeed(Player.CurrentStamina, Player.MaximumStamina, _staminaThresholdCheck, _staminaThreshold);
-            Character.transform.eulerAngles = ReturnMousePosition(_horizontalMouseSpeed, _verticalMouseSpeed);
-
-            //bool jump = Input.GetButton("Jump");
-
-
-
-            //hard code input to test damage and healing
-            if (Input.GetKeyDown(KeyCode.C))
-            {
-                Debug.Log("CurrentHealth: " + Player.CurrentHealth);
-
-                Player.Heal(_healthAmount);
-
-            }
-            if (Input.GetKeyDown(KeyCode.V))
-            {
-                Debug.Log("CurrentHealth: " + Player.CurrentHealth);
-
-                Player.Damage(_healthAmount);
-
-            }
         }
 
         public Vector3 CalculateMouseMovement(float horizontal, float vertical, float hSpeed, float vSpeed)
@@ -112,38 +106,30 @@ namespace Editor
 
         public Vector3 CalculateMovement(float horizontal, float vertical, float deltaTime, float speed)
         {
-            //we calculate any type of movement here by passing in the horizontal and vertical inputs along with the player's speed at time of use.
             float x = horizontal * speed * deltaTime;
             float z = vertical * speed * deltaTime;
 
-            return new Vector3(x, 0, z);
+            Vector3 move = (transform.right * x) + (transform.forward * z);
+
+            return move;
         }
 
         public bool IsActionAllowed(float stamina, bool thresholdCheck, float threshold)
         {
-            //We know as soon as stamina hits 0, we need to turn the threshold on
-            //and return false. The player should not be able to sprint, so return false
-            if(stamina == 0)
+            if (stamina == 0)
             {
                 thresholdCheck = true;
                 return false;
             }
-            //We know as long as stamina is less than threshold, and the check has been
-            //initially made, that we continue return false.
             if (stamina < threshold && thresholdCheck == true)
             {
                 return false;
             }
-            //Once we repass our threshold, we know it is okay for the player to sprint again
-            //so we make the check false so the above if doesn't get checked and we return
-            //true so the player can sprint again.
-            if(stamina >= threshold)
+            if (stamina >= threshold)
             {
                 thresholdCheck = false;
                 return true;
             }
-            //Otherwise, we return true just because the action should be allowed when stamina
-            //threshold has not been breached.
             thresholdCheck = false;
             return true;
         }
@@ -151,25 +137,21 @@ namespace Editor
         public void DecideSpeed(float currentStamina, float maxStamina, bool thresholdCheck, float threshold)
         {
             bool sprint = Input.GetButton("Sprint");
-            //Default: player is able to sprint as long as their stamina stays above 0.
             if (sprint && (IsActionAllowed(currentStamina, thresholdCheck, threshold) == true))
             {
                 Player.Sprint(_staminaDepleteAmount);
                 transform.position += ReturnPosition(_runningS);
             }
-            //Out of Energy: player is forced to wait until threshold is reached before they can sprint again.
-            else if(IsActionAllowed(currentStamina, thresholdCheck, threshold) == false)
+            else if (IsActionAllowed(currentStamina, thresholdCheck, threshold) == false)
             {
                 Player.Rest(_staminaRestoreAmount);
                 transform.position += ReturnPosition(_walkingS);
             }
-            //Full Energy: player does not need to call rest or sprint while they're at full energy walking around.
             else if (currentStamina == maxStamina)
             {
                 transform.position += ReturnPosition(_walkingS);
             }
-            //Recovering Energy: player normally recovers stamina as they're playing.
-            else if(IsActionAllowed(currentStamina, thresholdCheck, threshold) == true)
+            else if (IsActionAllowed(currentStamina, thresholdCheck, threshold) == true)
             {
                 Player.Rest(_staminaRestoreAmount);
                 transform.position += ReturnPosition(_walkingS);
@@ -186,16 +168,23 @@ namespace Editor
                     UnityService.GetDeltaTime(),
                     speed);
         }
-
-        public Vector3 ReturnMousePosition(float hSpeed, float vSpeed)
+        public void TestHPAndSPBars()
         {
-            //We simply have a method that returns another method to keep our code looking clean.
-            //Having to write this blob down is bad for readability
-            return CalculateMouseMovement(
-                    UnityService.GetAxisRaw("Mouse X"),
-                    UnityService.GetAxisRaw("Mouse Y"),
-                    hSpeed,
-                    vSpeed);
+            //hard code input to test damage and healing
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                Debug.Log("CurrentHealth: " + Player.CurrentHealth);
+
+                Player.Heal(_healthAmount);
+
+            }
+            if (Input.GetKeyDown(KeyCode.V))
+            {
+                Debug.Log("CurrentHealth: " + Player.CurrentHealth);
+
+                Player.Damage(_healthAmount);
+
+            }
         }
     }
 }

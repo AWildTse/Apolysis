@@ -1,27 +1,29 @@
 using NUnit.Framework;
 using System;
-using NSubstitute;
-using System.Collections;
-using UnityEngine.TestTools;
 using Editor.Infrastructure;
-
-
 namespace Editor
 {
     public class PlayerTests
     {
         public class TheCurrentHealthProperty
         {
+            private Player player;
+            [SetUp]
+            public void Before_Every_Test()
+            {
+                player = A.Player();
+            }
+
             [Test]
             public void Health_Defaults_To_0()
             {
-                var player = new Player(0);
                 Assert.AreEqual(0, player.CurrentHealth);
             }
 
             [Test]
             public void Throws_Exception_When_Current_Health_Is_Less_Than_0()
             {
+                //Assert.Throws<ArgumentOutOfRangeException>(() => new GameObject().AddComponent<Player>());
                 Assert.Throws<ArgumentOutOfRangeException>(() => new Player(-1));
             }
 
@@ -33,10 +35,18 @@ namespace Editor
 
             public class TheHealMethod
             {
+                private Player player;
+                [SetUp]
+                public void Before_Every_Test()
+                {
+                    player = A.Player();
+                    player.CurrentHealth = 0;
+                    player.MaximumHealth = 1;
+                }
+
                 [Test]
                 public void _0_Does_Nothing()
                 {
-                    var player = new Player(0);
                     player.Heal(0);
 
                     Assert.AreEqual(0, player.CurrentHealth);
@@ -45,8 +55,6 @@ namespace Editor
                 [Test]
                 public void _1_Increments_Current_Health()
                 {
-                    var player = new Player(0);
-
                     player.Heal(1);
 
                     Assert.AreEqual(1, player.CurrentHealth);
@@ -55,19 +63,24 @@ namespace Editor
                 [Test]
                 public void Overhealing_Is_Ignored()
                 {
-                    var player = new Player(0, 1);
-
                     player.Heal(2);
+
                     Assert.AreEqual(1, player.CurrentHealth);
                 }
             }
             public class TheDamageMethod
             {
+                private Player player;
+                [SetUp]
+                public void Before_Every_Test()
+                {
+                    player = A.Player();
+                    player.CurrentHealth = 1;
+                }
+
                 [Test]
                 public void _0_Does_Nothing()
                 {
-                    var player = new Player(1);
-
                     player.Damage(0);
 
                     Assert.AreEqual(1, player.CurrentHealth);
@@ -76,28 +89,36 @@ namespace Editor
                 [Test]
                 public void _1_Decrements_Current_Health()
                 {
-                    var player = new Player(1);
                     player.Damage(1);
+
                     Assert.AreEqual(0, player.CurrentHealth);
                 }
 
                 [Test]
                 public void _2_Overkill_Is_Ignored()
                 {
-                    var player = new Player(1);
-                    
                     player.Damage(2);
+
                     Assert.AreEqual(0, player.CurrentHealth);
                 }
             }
 
             public class TheHealedEvent
             {
+                private Player player;
+                [SetUp]
+                public void Before_Every_Test()
+                {
+                    player = A.Player();
+                    player.CurrentHealth = 1;
+                    player.MaximumHealth = 1;
+                }
+
                 [Test]
                 public void Raises_Event_On_Heal()
                 {
                     var amount = -1f;
-                    var player = new Player(1);
+
                     player.Healed += (sender, args) =>
                     {
                         amount = args.Amount;
@@ -112,7 +133,7 @@ namespace Editor
                 public void Overhealing_Is_Ignored()
                 {
                     var amount = -1f;
-                    var player = new Player(1, 1);
+
                     player.Healed += (sender, args) =>
                     {
                         amount = args.Amount;
@@ -125,11 +146,20 @@ namespace Editor
             }
             public class TheDamagedEvent
             {
+                private Player player;
+                [SetUp]
+                public void Before_Every_Test()
+                {
+                    player = A.Player();
+                }
+
                 [Test]
                 public void Raises_Event_On_Hit()
                 {
                     var amount = -1f;
-                    var player = new Player(1);
+
+                    player.CurrentHealth = 1;
+
                     player.Damaged += (sender, args) =>
                     {
                         amount = args.Amount;
@@ -144,7 +174,9 @@ namespace Editor
                 public void Overkill_Is_Ignored()
                 {
                     var amount = -1f;
-                    var player = new Player(0);
+
+                    player.CurrentHealth = 0
+                        ;
                     player.Damaged += (sender, args) =>
                     {
                         amount = args.Amount;
@@ -158,11 +190,17 @@ namespace Editor
         }
         public class TheCurrentStaminaProperty
         {
+            private Player player;
+            [SetUp]
+            public void Before_Every_Test()
+            {
+                player = A.Player();
+                player.CurrentStamina = 0;
+            }
 
             [Test]
             public void Stamina_Defaults_To_0()
             {
-                var player = new Player(1, 1, 0);
                 Assert.AreEqual(0, player.CurrentStamina);
             }
 
@@ -179,10 +217,18 @@ namespace Editor
             }
             public class TheRestoreStaminaMethod
             {
+                private Player player;
+                [SetUp]
+                public void Before_Every_Test()
+                {
+                    player = A.Player();
+                    player.CurrentStamina = 0;
+                    player.MaximumStamina = 1;
+                }
+
                 [Test]
                 public void _0_Does_Nothing()
                 {
-                    var player = new Player(1, 1, 0);
                     player.Rest(0);
 
                     Assert.AreEqual(0, player.CurrentStamina);
@@ -191,8 +237,6 @@ namespace Editor
                 [Test]
                 public void _1_Increments_Current_Stamina()
                 {
-                    var player = new Player(1, 1, 0);
-
                     player.Rest(1);
 
                     Assert.AreEqual(1, player.CurrentStamina);
@@ -201,19 +245,25 @@ namespace Editor
                 [Test]
                 public void Overresting_Is_Ignored()
                 {
-                    var player = new Player(1, 1, 0, 1);
-
                     player.Rest(2);
+
                     Assert.AreEqual(1, player.CurrentStamina);
                 }
             }
             public class TheUseStaminaMethod
             {
+                private Player player;
+                [SetUp]
+                public void Before_Every_Test()
+                {
+                    player = A.Player();
+                    player.CurrentStamina = 1;
+                    player.MaximumStamina = 1;
+                }
+
                 [Test]
                 public void _0_Does_Nothing()
                 {
-                    var player = new Player(1, 1, 1, 1);
-
                     player.Sprint(0);
 
                     Assert.AreEqual(1, player.CurrentStamina);
@@ -222,28 +272,38 @@ namespace Editor
                 [Test]
                 public void _1_Decrements_Current_Stamina()
                 {
-                    var player = new Player(1, 1, 1, 1);
                     player.Sprint(1);
+
                     Assert.AreEqual(0, player.CurrentStamina);
                 }
 
                 [Test]
                 public void _2_Oversprint_Is_Ignored()
                 {
-                    var player = new Player(1, 1, 0, 1);
+                    player.CurrentStamina = 0;
 
                     player.Sprint(2);
+
                     Assert.AreEqual(0, player.CurrentStamina);
                 }
             }
 
             public class TheRestEvent
             {
+                private Player player;
+                [SetUp]
+                public void Before_Every_Test()
+                {
+                    player = A.Player();
+                    player.CurrentStamina = 1;
+                    player.MaximumStamina = 1;
+                }
+
                 [Test]
                 public void Raises_Event_On_Rest()
                 {
                     var amount = -1f;
-                    var player = new Player(1, 1, 1);
+
                     player.Rested += (sender, args) =>
                     {
                         amount = args.Amount;
@@ -258,7 +318,7 @@ namespace Editor
                 public void Overresting_Is_Ignored()
                 {
                     var amount = -1f;
-                    var player = new Player(1, 1, 1, 1);
+
                     player.Rested += (sender, args) =>
                     {
                         amount = args.Amount;
@@ -271,11 +331,20 @@ namespace Editor
             }
             public class TheSprintEvent
             {
+                private Player player;
+                [SetUp]
+                public void Before_Every_Test()
+                {
+                    player = A.Player();
+                    player.CurrentStamina = 1;
+                    player.MaximumStamina = 1;
+                }
+
                 [Test]
                 public void Raises_Event_On_Run()
                 {
                     var amount = -1f;
-                    var player = new Player(1, 1, 1);
+
                     player.Sprinted += (sender, args) =>
                     {
                         amount = args.Amount;
@@ -290,7 +359,9 @@ namespace Editor
                 public void Oversprinting_Is_Ignored()
                 {
                     var amount = -1f;
-                    var player = new Player(1, 1, 0, 1);
+
+                    player.CurrentStamina = 0;
+
                     player.Sprinted += (sender, args) =>
                     {
                         amount = args.Amount;
@@ -302,73 +373,8 @@ namespace Editor
                 }
             }
         }
-        public class MovementTests
-        {
-            private IUnityService _unityService;
-            private Player _player;
-            private FirstPersonController FirstPersonController;
-
-
-            [SetUp]
-            public void BeforeEveryTest()
-            {
-                FirstPersonController = new FirstPersonController();
-                _player = A.Player();
-                _player.WalkingSpeed = 2;
-                _player.RunningSpeed = 4;
-                _unityService = Substitute.For<IUnityService>();
-            }
-
-            [UnityTest]
-            public IEnumerator Moves_Along_X_Axis_For_Horizontal_Input_Walking()
-            {
-                _unityService.GetAxisRaw("Horizontal").Returns(1);
-                _unityService.GetDeltaTime().Returns(1);
-                _player.UnityService = _unityService;
-
-                yield return null;
-
-                Assert.AreEqual(2, FirstPersonController.CalculateMovement(1, 0, 1, _player.WalkingSpeed).x, 0.1f);
-            }
-
-            [UnityTest]
-            public IEnumerator Moves_Along_Z_Axis_For_Vertical_Input_Walking()
-            {
-                _unityService.GetAxisRaw("Vertical").Returns(1);
-                _unityService.GetDeltaTime().Returns(1);
-                _player.UnityService = _unityService;
-
-                yield return null;
-
-                Assert.AreEqual(2, FirstPersonController.CalculateMovement(0, 1, 1, _player.WalkingSpeed).z, 0.1f);
-            }
-
-            [UnityTest]
-            public IEnumerator Moves_Along_X_Axis_For_Horizontal_Input_Running()
-            {
-                _unityService.GetAxisRaw("Horizontal").Returns(1);
-                _unityService.GetDeltaTime().Returns(1);
-                _player.UnityService = _unityService;
-
-                yield return null;
-
-                Assert.AreEqual(4, FirstPersonController.CalculateMovement(1, 0, 1, _player.RunningSpeed).x, 0.1f);
-            }
-
-            [UnityTest]
-            public IEnumerator Moves_Along_Z_Axis_For_Vertical_Input_Running()
-            {
-                _unityService.GetAxisRaw("Vertical").Returns(1);
-                _unityService.GetDeltaTime().Returns(1);
-                _player.UnityService = _unityService;
-
-                yield return null;
-
-                Assert.AreEqual(4, FirstPersonController.CalculateMovement(0, 1, 1, _player.RunningSpeed).z, 0.1f);
-            }
-        }
     }
 
-    
+
 
 }
