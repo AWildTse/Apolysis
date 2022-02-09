@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Editor
 {
@@ -22,7 +23,7 @@ namespace Editor
         [SerializeField] private int _walkingS = 2;
         [SerializeField] private int _runningS = 4;
 
-        [Header("Hardcode for Testing Health/Stamina Bar")]
+        [Header("Health and Stamina Bar")]
         [SerializeField] private float _healthAmount = 10f;
         [SerializeField] private float _staminaDepleteAmount = 0.04f;
         [SerializeField] private float _staminaRestoreAmount = 0.02f;
@@ -35,12 +36,15 @@ namespace Editor
         [SerializeField] private float jumpForce = 8f;
         [SerializeField] private float gravity = 30f;
 
+        private Camera playerCamera;
+
         //Mouse Input Variables
         private float xRotation;
         private float yRotation;
 
         private GameObject Character;
         private Rigidbody rigidbody;
+        private Camera camera;
 
         //Sprint Stamina Check Variables
         private bool _staminaThresholdCheck = false;
@@ -58,7 +62,8 @@ namespace Editor
         void Start()
         {
             Player = new Player(_currentHP, _maximumHP, _currentSP, _maximumSP, _walkingS, _runningS);
-            rigidbody = new GameObject().AddComponent<Rigidbody>();
+            rigidbody = GetComponent<Rigidbody>();
+            camera = GetComponentInChildren<Camera>();
 
             Player.Healed += (sender, args) => UIElements._healthBar.ReplenishHealth(args.Amount);
             Player.Damaged += (sender, args) => UIElements._healthBar.DepleteHealth(args.Amount);
@@ -85,7 +90,7 @@ namespace Editor
 
         public void HandleMouseMovement()
         {
-            Character.transform.eulerAngles = CalculateMouseMovement(
+            camera.transform.localEulerAngles = CalculateMouseMovement(
                     UnityService.GetAxisRaw("Mouse X"),
                     UnityService.GetAxisRaw("Mouse Y"),
                     _horizontalMouseSpeed,
@@ -105,8 +110,9 @@ namespace Editor
             yRotation += mouseX;
             xRotation -= mouseY;
             xRotation = Mathf.Clamp(xRotation, -90, 90);
+            transform.localEulerAngles = new Vector3(0, yRotation, 0);
 
-            return new Vector3(xRotation, yRotation, 0.0f);
+            return new Vector3(xRotation, 0, 0);
         }
 
         public Vector3 CalculateMovement(float horizontal, float vertical, float deltaTime, float speed)

@@ -66,6 +66,7 @@
     <Compile Include="Assets\Scripts\UI\StaminaBar.cs" />
     <Compile Include="Assets\Scripts\Infrastructure\HealthBarBuilder.cs" />
     <Compile Include="Assets\Scripts\Infrastructure\PlayerBuilder.cs" />
+    <Compile Include="Assets\ModularFirstPersonController\FirstPersonController\FirstPersonController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\JapaneseAlley\README.txt" />
