@@ -30,7 +30,6 @@ namespace Editor
         private IUnityService _unityService;
         private Player _player;
         private GameObject _placeHolder;
-        private Rigidbody _rigidbody;
         #endregion
 
         #region Camera Variables
@@ -48,7 +47,7 @@ namespace Editor
         #endregion
 
         #region Movement Variables
-        public bool CanMove { get; private set; } = true;
+        public bool PlayerCanMove { get; private set; } = true;
 
         #region Sprinting Variables
         private bool _staminaThresholdCheck = false;
@@ -61,7 +60,9 @@ namespace Editor
         #region Jumping Variables
         private float _jumpPower = 5f;
         private bool _isGrounded = true;
-        public bool CanJump { get; private set; } = true;
+        private Rigidbody _rigidbody;
+
+        public bool PlayerCanJump { get; private set; } = true;
         #endregion
         #endregion
 
@@ -74,6 +75,7 @@ namespace Editor
         // Start is called before the first frame update
         void Start()
         {
+            #region Set Up Variables
             _player = new Player(_currentHP, _maximumHP, _currentSP, _maximumSP, _walkingS, _runningS);
             _rigidbody = GetComponent<Rigidbody>();
             _camera = GetComponentInChildren<Camera>();
@@ -89,11 +91,14 @@ namespace Editor
 
             _healthBar = new HealthBar(_healthBarImage);
             _staminaBar = new StaminaBar(_staminaBarImage);
+            #endregion
 
+            #region Set Up EventArgs
             _player.Healed += (sender, args) => _healthBar.ReplenishHealth(args.Amount);
             _player.Damaged += (sender, args) => _healthBar.DepleteHealth(args.Amount);
             _player.Rested += (sender, args) => _staminaBar.RestoreStamina(args.Amount);
             _player.Sprinted += (sender, args) => _staminaBar.DepleteStamina(args.Amount);
+            #endregion
 
             if (_unityService == null)
                 _unityService = new UnityService();
@@ -102,13 +107,49 @@ namespace Editor
         // Update is called once per frame
         void Update()
         {
-            if (CanMove)
+            if(PlayerCanMove)
             {
                 HandleMouseMovement();
+            }
+            if(CameraCanMove)
+            {
                 HandlePlayerMovement();
             }
+            if(PlayerCanJump)
+            {
+                Jump();
+            }
+
+            CheckGround();
+
             TestHPAndSPBars();
         }
+
+        public void Jump()
+        {
+            if(Input.GetButtonDown("Jump") && _isGrounded)
+            {
+                _rigidbody.AddForce(0f, _jumpPower, 0f, ForceMode.Impulse);
+                _isGrounded = false;
+            }
+        }
+
+        public void CheckGround()
+        {
+            Vector3 origin = new Vector3(transform.position.x, transform.position.y - (transform.localScale.y * .5f), transform.position.z);
+            Vector3 direction = transform.TransformDirection(Vector3.down);
+            float distance = .75f;
+
+            if (Physics.Raycast(origin, direction, out RaycastHit hit, distance))
+            {
+                Debug.DrawRay(origin, direction * distance, Color.red);
+                _isGrounded = true;
+            }
+            else
+            {
+                _isGrounded = false;
+            }
+        }    
 
         public void HandleMouseMovement()
         {
