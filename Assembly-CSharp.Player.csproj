@@ -57,7 +57,6 @@
     <Compile Include="Assets\Scripts\Infrastructure\An.cs" />
     <Compile Include="Assets\Scripts\Player\Player.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IUnityService.cs" />
-    <Compile Include="Assets\Scripts\UI\UIElements.cs" />
     <Compile Include="Assets\Scripts\Infrastructure\StaminaBarBuilder.cs" />
     <Compile Include="Assets\Scripts\Infrastructure\ImageBuilder.cs" />
     <Compile Include="Assets\Scripts\Infrastructure\TestDataBuilder.cs" />

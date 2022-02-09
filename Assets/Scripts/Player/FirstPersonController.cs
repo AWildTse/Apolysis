@@ -7,14 +7,7 @@ namespace Editor
 {
     public class FirstPersonController : MonoBehaviour
     {
-        public bool CanMove { get; private set; } = true;
-        public bool IsMoving { get; private set; } = true;
-        public bool CanJump { get; private set; } = true;
-
-        public IUnityService UnityService;
-        private Player Player;
-        private UIElements UIElements;
-
+        #region Serializable Fields
         [Header("Player Stats")]
         [SerializeField] private int _currentHP = 100;
         [SerializeField] private int _maximumHP = 100;
@@ -29,31 +22,51 @@ namespace Editor
         [SerializeField] private float _staminaRestoreAmount = 0.02f;
 
         [Header("Hardcode for Testing Mouse Movement")]
-        [SerializeField] public float _horizontalMouseSpeed = 1f;
-        [SerializeField] public float _verticalMouseSpeed = 1f;
+        [SerializeField] private float _horizontalMouseSensitivity = 1f;
+        [SerializeField] private float _verticalMouseSensitivity = 1f;
+        #endregion
 
-        [Header("Hardcode for Testing Jumping")]
-        [SerializeField] private float jumpForce = 8f;
-        [SerializeField] private float gravity = 30f;
+        #region GetComponent Variables
+        private IUnityService _unityService;
+        private Player _player;
+        private GameObject _placeHolder;
+        private Rigidbody _rigidbody;
+        #endregion
 
-        private Camera playerCamera;
+        #region Camera Variables
+        private Camera _camera;
+        private float _xRotation;
+        private float _yRotation;
+        public const float FieldOfVision = 60f;
+        public bool CameraCanMove { get; private set; } = true;
+        #endregion
 
-        //Mouse Input Variables
-        private float xRotation;
-        private float yRotation;
+        #region HealthBar Variables
+        [SerializeField] private Image _healthBarImage;
+        [SerializeField] private Image _healthBarImageBG;
+        private HealthBar _healthBar;
+        #endregion
 
-        private GameObject Character;
-        private Rigidbody rigidbody;
-        private Camera camera;
+        #region Movement Variables
+        public bool CanMove { get; private set; } = true;
 
-        //Sprint Stamina Check Variables
+        #region Sprinting Variables
         private bool _staminaThresholdCheck = false;
         private const float _staminaThreshold = 60f;
+        [SerializeField] private Image _staminaBarImage;
+        [SerializeField] private Image _staminaBarImageBG;
+        private StaminaBar _staminaBar;
+        #endregion
+        
+        #region Jumping Variables
+        private float _jumpPower = 5f;
+        private bool _isGrounded = true;
+        public bool CanJump { get; private set; } = true;
+        #endregion
+        #endregion
 
         private void Awake()
         {
-            UIElements = gameObject.GetComponent<UIElements>();
-            Character = transform.gameObject;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
@@ -61,25 +74,34 @@ namespace Editor
         // Start is called before the first frame update
         void Start()
         {
-            Player = new Player(_currentHP, _maximumHP, _currentSP, _maximumSP, _walkingS, _runningS);
-            rigidbody = GetComponent<Rigidbody>();
-            camera = GetComponentInChildren<Camera>();
+            _player = new Player(_currentHP, _maximumHP, _currentSP, _maximumSP, _walkingS, _runningS);
+            _rigidbody = GetComponent<Rigidbody>();
+            _camera = GetComponentInChildren<Camera>();
 
-            Player.Healed += (sender, args) => UIElements._healthBar.ReplenishHealth(args.Amount);
-            Player.Damaged += (sender, args) => UIElements._healthBar.DepleteHealth(args.Amount);
-            Player.Rested += (sender, args) => UIElements._staminaBar.RestoreStamina(args.Amount);
-            Player.Sprinted += (sender, args) => UIElements._staminaBar.DepleteStamina(args.Amount);
+            _placeHolder = gameObject.transform.GetChild(1).GetChild(0).GetChild(0).gameObject;
+            _healthBarImage = _placeHolder.GetComponent<Image>();
+            _placeHolder = gameObject.transform.GetChild(1).GetChild(0).GetChild(1).gameObject;
+            _healthBarImageBG = _placeHolder.GetComponent<Image>();
+            _placeHolder = gameObject.transform.GetChild(1).GetChild(1).GetChild(0).gameObject;
+            _staminaBarImage = _placeHolder.GetComponent<Image>();
+            _placeHolder = gameObject.transform.GetChild(1).GetChild(1).GetChild(1).gameObject;
+            _staminaBarImageBG = _placeHolder.GetComponent<Image>();
 
+            _healthBar = new HealthBar(_healthBarImage);
+            _staminaBar = new StaminaBar(_staminaBarImage);
 
-            if (UnityService == null)
-                UnityService = new UnityService();
+            _player.Healed += (sender, args) => _healthBar.ReplenishHealth(args.Amount);
+            _player.Damaged += (sender, args) => _healthBar.DepleteHealth(args.Amount);
+            _player.Rested += (sender, args) => _staminaBar.RestoreStamina(args.Amount);
+            _player.Sprinted += (sender, args) => _staminaBar.DepleteStamina(args.Amount);
+
+            if (_unityService == null)
+                _unityService = new UnityService();
         }
 
         // Update is called once per frame
         void Update()
         {
-            IsMoving = true;
-
             if (CanMove)
             {
                 HandleMouseMovement();
@@ -90,16 +112,16 @@ namespace Editor
 
         public void HandleMouseMovement()
         {
-            camera.transform.localEulerAngles = CalculateMouseMovement(
-                    UnityService.GetAxisRaw("Mouse X"),
-                    UnityService.GetAxisRaw("Mouse Y"),
-                    _horizontalMouseSpeed,
-                    _verticalMouseSpeed);
+            _camera.transform.localEulerAngles = CalculateMouseMovement(
+                    _unityService.GetAxisRaw("Mouse X"),
+                    _unityService.GetAxisRaw("Mouse Y"),
+                    _horizontalMouseSensitivity,
+                    _verticalMouseSensitivity);
         }
 
         public void HandlePlayerMovement()
         {
-            DecideSpeed(Player.CurrentStamina, Player.MaximumStamina, _staminaThresholdCheck, _staminaThreshold);
+            DecideSpeed(_player.CurrentStamina, _player.MaximumStamina, _staminaThresholdCheck, _staminaThreshold);
         }
 
         public Vector3 CalculateMouseMovement(float horizontal, float vertical, float hSpeed, float vSpeed)
@@ -107,12 +129,12 @@ namespace Editor
             float mouseX = horizontal * hSpeed;
             float mouseY = vertical * vSpeed;
 
-            yRotation += mouseX;
-            xRotation -= mouseY;
-            xRotation = Mathf.Clamp(xRotation, -90, 90);
-            transform.localEulerAngles = new Vector3(0, yRotation, 0);
+            _yRotation += mouseX;
+            _xRotation -= mouseY;
+            _xRotation = Mathf.Clamp(_xRotation, -90, 90);
+            transform.localEulerAngles = new Vector3(0, _yRotation, 0);
 
-            return new Vector3(xRotation, 0, 0);
+            return new Vector3(_xRotation, 0, 0);
         }
 
         public Vector3 CalculateMovement(float horizontal, float vertical, float deltaTime, float speed)
@@ -150,28 +172,24 @@ namespace Editor
             bool sprint = Input.GetButton("Sprint");
             if (sprint && (IsActionAllowed(currentStamina, thresholdCheck, threshold) == true))
             {
-                Player.Sprint(_staminaDepleteAmount);
+                _player.Sprint(_staminaDepleteAmount);
                 transform.position += ReturnPosition(_runningS);
-                IsMoving = true;
             }
             else if (IsActionAllowed(currentStamina, thresholdCheck, threshold) == false)
             {
-                Player.Rest(_staminaRestoreAmount);
+                _player.Rest(_staminaRestoreAmount);
                 transform.position += ReturnPosition(_walkingS);
-                IsMoving = true;
 
             }
             else if (currentStamina == maxStamina)
             {
                 transform.position += ReturnPosition(_walkingS);
-                IsMoving = true;
 
             }
             else if (IsActionAllowed(currentStamina, thresholdCheck, threshold) == true)
             {
-                Player.Rest(_staminaRestoreAmount);
+                _player.Rest(_staminaRestoreAmount);
                 transform.position += ReturnPosition(_walkingS);
-                IsMoving = true;
             }
         }
 
@@ -181,9 +199,9 @@ namespace Editor
             //Having to write this blob down is bad for readability
             
             return CalculateMovement(
-                    UnityService.GetAxisRaw("Horizontal"),
-                    UnityService.GetAxisRaw("Vertical"),
-                    UnityService.GetDeltaTime(),
+                    _unityService.GetAxisRaw("Horizontal"),
+                    _unityService.GetAxisRaw("Vertical"),
+                    _unityService.GetDeltaTime(),
                     speed);
         }
         public void TestHPAndSPBars()
@@ -191,16 +209,16 @@ namespace Editor
             //hard code input to test damage and healing
             if (Input.GetKeyDown(KeyCode.C))
             {
-                Debug.Log("CurrentHealth: " + Player.CurrentHealth);
+                Debug.Log("CurrentHealth: " + _player.CurrentHealth);
 
-                Player.Heal(_healthAmount);
+                _player.Heal(_healthAmount);
 
             }
             if (Input.GetKeyDown(KeyCode.V))
             {
-                Debug.Log("CurrentHealth: " + Player.CurrentHealth);
+                Debug.Log("CurrentHealth: " + _player.CurrentHealth);
 
-                Player.Damage(_healthAmount);
+                _player.Damage(_healthAmount);
 
             }
         }
