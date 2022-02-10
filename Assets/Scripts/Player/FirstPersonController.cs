@@ -15,6 +15,7 @@ namespace Editor
         [SerializeField] private int _maximumSP = 100;
         [SerializeField] private int _walkingS = 2;
         [SerializeField] private int _runningS = 4;
+        [SerializeField] private int _crouchingReduction = 1;
 
         [Header("Health and Stamina Bar")]
         [SerializeField] private float _healthAmount = 10f;
@@ -30,6 +31,7 @@ namespace Editor
         private IUnityService _unityService;
         private Player _player;
         private GameObject _placeHolder;
+        private CapsuleCollider _capsuleCollider;
         #endregion
 
         #region Camera Variables
@@ -64,6 +66,14 @@ namespace Editor
 
         public bool PlayerCanJump { get; private set; } = true;
         #endregion
+
+        #region Crouching Variables
+        private float _crouchingHeight = 1.5f;
+        private float _standingHeight = 2f;
+        private bool _isCrouched = false;
+        private Vector3 _originalScale;
+        public bool PlayerCanCrouch { get; private set; } = true;
+        #endregion
         #endregion
 
         private void Awake()
@@ -76,9 +86,10 @@ namespace Editor
         void Start()
         {
             #region Set Up Variables
-            _player = new Player(_currentHP, _maximumHP, _currentSP, _maximumSP, _walkingS, _runningS);
+            _player = new Player(_currentHP, _maximumHP, _currentSP, _maximumSP, _walkingS, _runningS, _crouchingReduction);
             _rigidbody = GetComponent<Rigidbody>();
             _camera = GetComponentInChildren<Camera>();
+            _capsuleCollider = GetComponent<CapsuleCollider>();
 
             _placeHolder = gameObject.transform.GetChild(1).GetChild(0).GetChild(0).gameObject;
             _healthBarImage = _placeHolder.GetComponent<Image>();
@@ -111,29 +122,88 @@ namespace Editor
             {
                 HandleMouseMovement();
             }
+
             if(CameraCanMove)
             {
                 HandlePlayerMovement();
             }
+
             if(PlayerCanJump)
             {
-                Jump();
+                if (Input.GetButtonDown("Jump") && _isGrounded)
+                {
+                    Jump();
+                }
             }
-
             CheckGround();
+
+            if (PlayerCanCrouch)
+            {
+                if (Input.GetButtonDown("Crouch"))
+                {
+                    _isCrouched = false;
+                    Crouch();
+                }
+                else if(Input.GetButtonUp("Crouch"))
+                {
+                    _isCrouched = true;
+                    Crouch();
+                }
+            }
 
             TestHPAndSPBars();
         }
 
         public void Jump()
         {
-            if(Input.GetButtonDown("Jump") && _isGrounded)
-            {
-                _rigidbody.AddForce(0f, _jumpPower, 0f, ForceMode.Impulse);
-                _isGrounded = false;
-            }
+            _rigidbody.AddForce(0f, _jumpPower, 0f, ForceMode.Impulse);
+            _isGrounded = false;
         }
 
+        public void Crouch()
+        {
+            if (_isCrouched)
+            {
+                //transform.localScale = new Vector3(_originalScale.x, _originalScale.y, _originalScale.z);
+                //_capsuleCollider.height = _standingHeight;
+                StartCoroutine(setCrouchingSpeed(_standingHeight, _crouchingHeight));
+                _walkingS /= _crouchingReduction;
+
+                _isCrouched = false;
+            }
+            // Crouches player down to set height
+            // Reduces walkSpeed
+            else
+            {
+                //transform.localScale = new Vector3(_originalScale.x, _crouchHeight, _originalScale.z);
+                //_capsuleCollider.height = _crouchingHeight;
+                StartCoroutine(setCrouchingSpeed(_standingHeight, _crouchingHeight));
+                _walkingS *= _crouchingReduction;
+
+                _isCrouched = true;
+            }
+        }
+        public IEnumerator setCrouchingSpeed(float standingHeight, float crouchingHeight)
+        {
+            if (_isCrouched)
+            {
+                float math;
+                for(math = standingHeight - crouchingHeight; math > 0; math -= 0.1f)
+                {
+                    _capsuleCollider.height += 0.1f;
+                    yield return new WaitForSecondsRealtime(.01f);
+                }
+            }
+            else
+            {
+                float math;
+                for (math = standingHeight - crouchingHeight; math > 0; math -= 0.1f)
+                {
+                    _capsuleCollider.height -= 0.1f;
+                    yield return new WaitForSecondsRealtime(.01f);
+                }
+            }
+        }
         public void CheckGround()
         {
             Vector3 origin = new Vector3(transform.position.x, transform.position.y - (transform.localScale.y * .5f), transform.position.z);
@@ -172,7 +242,7 @@ namespace Editor
 
             _yRotation += mouseX;
             _xRotation -= mouseY;
-            _xRotation = Mathf.Clamp(_xRotation, -90, 90);
+            _xRotation = Mathf.Clamp(_xRotation, -90, 50);
             transform.localEulerAngles = new Vector3(0, _yRotation, 0);
 
             return new Vector3(_xRotation, 0, 0);

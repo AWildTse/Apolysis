@@ -28,7 +28,7 @@ namespace Editor
             }
 
             [Test]
-            public void Throws_Exceptiop_When_Current_Health_Is_Greather_Than_Maximum_Health()
+            public void Throws_Exception_When_Current_Health_Is_Greather_Than_Maximum_Health()
             {
                 Assert.Throws<ArgumentOutOfRangeException>(() => new Player(2, 1));
             }

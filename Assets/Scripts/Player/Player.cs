@@ -10,8 +10,9 @@ namespace Editor
         public float MaximumHealth { get; set; }
         public float CurrentStamina { get; set; }
         public float MaximumStamina { get; set; }
-        public int WalkingSpeed { get; set; }
-        public int RunningSpeed { get; set; }
+        public float WalkingSpeed { get; set; }
+        public float RunningSpeed { get; set; }
+        public float CrouchingSpeed { get; set; }
 
         public event EventHandler<HealedEventArgs> Healed;
         public event EventHandler<DamagedEventArgs> Damaged;
@@ -20,7 +21,7 @@ namespace Editor
 
         public IUnityService UnityService;
 
-        public Player(float currentHealth = 100, float maximumHealth = 100, float currentStamina = 100, float maximumStamina = 100, int walkingSpeed = 2, int runningSpeed = 4)
+        public Player(float currentHealth = 100, float maximumHealth = 100, float currentStamina = 100, float maximumStamina = 100, float walkingSpeed = 2, float runningSpeed = 4, float crouchingSpeed = 1)
         {
             //Check for health range exceptions
             if (currentHealth < 0) throw new ArgumentOutOfRangeException("currentHealth");
@@ -37,7 +38,8 @@ namespace Editor
             MaximumStamina = maximumStamina;
             
             WalkingSpeed = walkingSpeed;
-            RunningSpeed = runningSpeed;            
+            RunningSpeed = runningSpeed;
+            CrouchingSpeed = crouchingSpeed;
         }
 
         private void Start()
