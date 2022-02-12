@@ -150,10 +150,8 @@ namespace Editor
         // Update is called once per frame
         void Update()
         {
-            //if(!_positionCoroutineStarted)
-            //{
-                StartCoroutine(CheckPositionCoroutine());
-            //}
+            StartCoroutine(CheckPositionCoroutine());
+
             if (CameraCanMove)
             {
                 HandleMouseMovement();
@@ -171,10 +169,12 @@ namespace Editor
                     Jump();
                 }
             }
+
             if (PlayerCanHeadBob)
             {
                 HeadBob();
             }
+            
             CheckGround();
 
             if (PlayerCanCrouch)
