@@ -7,22 +7,22 @@ namespace Editor
 {
     public class FirstPersonController : MonoBehaviour
     {
-        #region Serializable Fields
-        [Header("Player Stats")]
+        #region Player Instantiation Fields
+        [Header("Player Instantiation Fields")]
         [SerializeField] private int _currentHP = 100;
         [SerializeField] private int _maximumHP = 100;
         [SerializeField] private int _currentSP = 100;
         [SerializeField] private int _maximumSP = 100;
-        [SerializeField] private int _walkingS = 2;
-        [SerializeField] private int _runningS = 4;
-        [SerializeField] private int _crouchingReduction = 1;
+        [SerializeField] private int _walkingSpeed = 2;
+        [SerializeField] private int _runningSpeed = 4;
+        [SerializeField] private int _crouchingSpeedMultiplier = 1;
 
         [Header("Health and Stamina Bar")]
         [SerializeField] private float _healthAmount = 10f;
         [SerializeField] private float _staminaDepleteAmount = 0.04f;
         [SerializeField] private float _staminaRestoreAmount = 0.02f;
 
-        [Header("Hardcode for Testing Mouse Movement")]
+        [Header("Mouse Sensitivity")]
         [SerializeField] private float _horizontalMouseSensitivity = 1f;
         [SerializeField] private float _verticalMouseSensitivity = 1f;
         #endregion
@@ -35,32 +35,43 @@ namespace Editor
         #endregion
 
         #region Camera Variables
+        [Header("Camera Variables")]
+        [SerializeField] public float FieldOfVision = 60f;
         private Camera _camera;
         private float _xRotation;
         private float _yRotation;
-        public const float FieldOfVision = 60f;
         public bool CameraCanMove { get; private set; } = true;
         #endregion
 
         #region HealthBar Variables
-        [SerializeField] private Image _healthBarImage;
-        [SerializeField] private Image _healthBarImageBG;
+        private Image _healthBarImage;
+        private Image _healthBarImageBG;
         private HealthBar _healthBar;
         #endregion
 
         #region Movement Variables
+        private Vector3 _oldPosition;
+        private Vector3 _newPosition;
+        private bool _isWalking = true;
+        private bool _positionCoroutineStarted = false;
         public bool PlayerCanMove { get; private set; } = true;
 
         #region Sprinting Variables
+        [Header("Sprinting Variables")]
+
+        [Tooltip("The percentage out of 100 before player can sprint again if Out Of Energy")]
+        [Range(1, 100)]
+        [SerializeField] private float _staminaThreshold = 60f;
         private bool _staminaThresholdCheck = false;
-        private const float _staminaThreshold = 60f;
-        [SerializeField] private Image _staminaBarImage;
-        [SerializeField] private Image _staminaBarImageBG;
+        private bool _isSprinting = false;
+        private Image _staminaBarImage;
+        private Image _staminaBarImageBG;
         private StaminaBar _staminaBar;
         #endregion
-        
+
         #region Jumping Variables
-        private float _jumpPower = 5f;
+        [Header("Jumping Variables")]
+        [SerializeField] private float _jumpPower = 5f;
         private bool _isGrounded = true;
         private Rigidbody _rigidbody;
 
@@ -68,29 +79,50 @@ namespace Editor
         #endregion
 
         #region Crouching Variables
-        private float _crouchingHeight = 1.5f;
-        private float _standingHeight = 2f;
+        [Header("Crouching Variables")]
+        [SerializeField] private float _crouchingHeight = 1.5f;
+        [SerializeField] private float _standingHeight = 2f;
         private bool _isCrouched = false;
         private Vector3 _originalScale;
         public bool PlayerCanCrouch { get; private set; } = true;
+        #endregion
+
+        #region HeadBob Variables
+        [Header("Headbob Variables")]
+        [SerializeField] private float _walkBobSpeed = 14f;
+        [SerializeField] private float _walkBobAmount = 0.05f;
+        [SerializeField] private float _sprintBobSpeed = 18f;
+        [SerializeField] private float _sprintBobAmount = 0.11f;
+        [SerializeField] private float _crouchBobSpeed = 8f;
+        [SerializeField] private float _crouchBobAmount = 0.025f;
+
+        private float _defaultYPos = 0;
+        private float _headBobTimer;
+        public bool PlayerCanHeadBob { get; private set; } = true;
         #endregion
         #endregion
 
         private void Awake()
         {
+            #region Cursor
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+            #endregion
+
+            #region Initializing Variables
+            _player = new Player(_currentHP, _maximumHP, _currentSP, _maximumSP, _walkingSpeed, _runningSpeed, _crouchingSpeedMultiplier);
+            _rigidbody = GetComponent<Rigidbody>();
+            _camera = GetComponentInChildren<Camera>();
+            _capsuleCollider = GetComponent<CapsuleCollider>();
+            _defaultYPos = _camera.transform.localPosition.y;
+            _oldPosition = transform.localPosition;
+            #endregion
         }
 
         // Start is called before the first frame update
         void Start()
         {
             #region Set Up Variables
-            _player = new Player(_currentHP, _maximumHP, _currentSP, _maximumSP, _walkingS, _runningS, _crouchingReduction);
-            _rigidbody = GetComponent<Rigidbody>();
-            _camera = GetComponentInChildren<Camera>();
-            _capsuleCollider = GetComponent<CapsuleCollider>();
-
             _placeHolder = gameObject.transform.GetChild(1).GetChild(0).GetChild(0).gameObject;
             _healthBarImage = _placeHolder.GetComponent<Image>();
             _placeHolder = gameObject.transform.GetChild(1).GetChild(0).GetChild(1).gameObject;
@@ -118,22 +150,30 @@ namespace Editor
         // Update is called once per frame
         void Update()
         {
-            if(PlayerCanMove)
+            //if(!_positionCoroutineStarted)
+            //{
+                StartCoroutine(CheckPositionCoroutine());
+            //}
+            if (CameraCanMove)
             {
                 HandleMouseMovement();
             }
 
-            if(CameraCanMove)
+            if (PlayerCanMove)
             {
                 HandlePlayerMovement();
             }
 
-            if(PlayerCanJump)
+            if (PlayerCanJump)
             {
                 if (Input.GetButtonDown("Jump") && _isGrounded)
                 {
                     Jump();
                 }
+            }
+            if (PlayerCanHeadBob)
+            {
+                HeadBob();
             }
             CheckGround();
 
@@ -142,11 +182,13 @@ namespace Editor
                 if (Input.GetButtonDown("Crouch"))
                 {
                     _isCrouched = false;
+                    _isWalking = true;
                     Crouch();
                 }
-                else if(Input.GetButtonUp("Crouch"))
+                else if (Input.GetButtonUp("Crouch"))
                 {
                     _isCrouched = true;
+                    _isWalking = false;
                     Crouch();
                 }
             }
@@ -158,37 +200,35 @@ namespace Editor
         {
             _rigidbody.AddForce(0f, _jumpPower, 0f, ForceMode.Impulse);
             _isGrounded = false;
+            _isWalking = false;
         }
 
         public void Crouch()
         {
             if (_isCrouched)
             {
-                //transform.localScale = new Vector3(_originalScale.x, _originalScale.y, _originalScale.z);
-                //_capsuleCollider.height = _standingHeight;
-                StartCoroutine(setCrouchingSpeed(_standingHeight, _crouchingHeight));
-                _walkingS /= _crouchingReduction;
+                StartCoroutine(SmoothCrouchCoroutine(_standingHeight, _crouchingHeight));
+                _walkingSpeed /= _crouchingSpeedMultiplier;
 
                 _isCrouched = false;
+                _isWalking = true;
             }
-            // Crouches player down to set height
-            // Reduces walkSpeed
             else
             {
-                //transform.localScale = new Vector3(_originalScale.x, _crouchHeight, _originalScale.z);
-                //_capsuleCollider.height = _crouchingHeight;
-                StartCoroutine(setCrouchingSpeed(_standingHeight, _crouchingHeight));
-                _walkingS *= _crouchingReduction;
+                StartCoroutine(SmoothCrouchCoroutine(_standingHeight, _crouchingHeight));
+                _walkingSpeed *= _crouchingSpeedMultiplier;
 
                 _isCrouched = true;
+                _isWalking = false;
             }
         }
-        public IEnumerator setCrouchingSpeed(float standingHeight, float crouchingHeight)
+
+        public IEnumerator SmoothCrouchCoroutine(float standingHeight, float crouchingHeight)
         {
             if (_isCrouched)
             {
                 float math;
-                for(math = standingHeight - crouchingHeight; math > 0; math -= 0.1f)
+                for (math = standingHeight - crouchingHeight; math > 0; math -= 0.1f)
                 {
                     _capsuleCollider.height += 0.1f;
                     yield return new WaitForSecondsRealtime(.01f);
@@ -204,6 +244,18 @@ namespace Editor
                 }
             }
         }
+
+        public IEnumerator CheckPositionCoroutine()
+        {
+            _positionCoroutineStarted = true;
+
+            _newPosition = transform.localPosition;
+
+            yield return new WaitForSecondsRealtime(.01f);
+
+            _oldPosition = _newPosition;
+        }
+
         public void CheckGround()
         {
             Vector3 origin = new Vector3(transform.position.x, transform.position.y - (transform.localScale.y * .5f), transform.position.z);
@@ -219,7 +271,44 @@ namespace Editor
             {
                 _isGrounded = false;
             }
-        }    
+        }
+
+        public void HeadBob()
+        {
+            if (!_isGrounded) return;
+
+            Debug.Log("_oldPosition: " + _oldPosition);
+            Debug.Log("transform.position: " + transform.localPosition);
+
+            if (_newPosition != _oldPosition)
+            {
+                if (_isSprinting)
+                {
+                    _headBobTimer += _unityService.GetDeltaTime() * _sprintBobSpeed;
+                    _camera.transform.localPosition = new Vector3(
+                        _camera.transform.localPosition.x,
+                        _defaultYPos + Mathf.Sin(_headBobTimer) * _sprintBobAmount);
+                }
+                else if (_isCrouched)
+                {
+                    _headBobTimer += _unityService.GetDeltaTime() * _crouchBobSpeed;
+                    _camera.transform.localPosition = new Vector3(
+                        _camera.transform.localPosition.x,
+                        _defaultYPos + Mathf.Sin(_headBobTimer) * _crouchBobAmount);
+                }
+                else if (_isWalking)
+                {
+                    _headBobTimer += _unityService.GetDeltaTime() * _walkBobSpeed;
+                    _camera.transform.localPosition = new Vector3(
+                        _camera.transform.localPosition.x,
+                        _defaultYPos + Mathf.Sin(_headBobTimer) * _walkBobAmount);
+                }
+            }
+            else
+            {
+                Debug.Log("They're the same value");
+            }    
+        }
 
         public void HandleMouseMovement()
         {
@@ -283,24 +372,30 @@ namespace Editor
             bool sprint = Input.GetButton("Sprint");
             if (sprint && (IsActionAllowed(currentStamina, thresholdCheck, threshold) == true))
             {
+                _isSprinting = true;
+                _isWalking = false;
                 _player.Sprint(_staminaDepleteAmount);
-                transform.position += ReturnPosition(_runningS);
+                transform.localPosition += ReturnPosition(_runningSpeed);
             }
             else if (IsActionAllowed(currentStamina, thresholdCheck, threshold) == false)
             {
+                _isSprinting = false;
+                _isWalking = true;
                 _player.Rest(_staminaRestoreAmount);
-                transform.position += ReturnPosition(_walkingS);
-
+                transform.localPosition += ReturnPosition(_walkingSpeed);
             }
             else if (currentStamina == maxStamina)
             {
-                transform.position += ReturnPosition(_walkingS);
-
+                _isSprinting = false;
+                _isWalking = true;
+                transform.localPosition += ReturnPosition(_walkingSpeed);
             }
             else if (IsActionAllowed(currentStamina, thresholdCheck, threshold) == true)
             {
+                _isSprinting = false;
+                _isWalking = true;
                 _player.Rest(_staminaRestoreAmount);
-                transform.position += ReturnPosition(_walkingS);
+                transform.localPosition += ReturnPosition(_walkingSpeed);
             }
         }
 

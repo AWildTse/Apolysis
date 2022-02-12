@@ -764,18 +764,25 @@ MonoBehaviour:
   _maximumHP: 100
   _currentSP: 100
   _maximumSP: 100
-  _walkingS: 2
-  _runningS: 4
-  _crouchingReduction: 1
+  _walkingSpeed: 2
+  _runningSpeed: 4
+  _crouchingSpeedMultiplier: 1
   _healthAmount: 10
   _staminaDepleteAmount: 0.04
   _staminaRestoreAmount: 0.02
   _horizontalMouseSensitivity: 1
   _verticalMouseSensitivity: 1
-  _healthBarImage: {fileID: 0}
-  _healthBarImageBG: {fileID: 0}
-  _staminaBarImage: {fileID: 0}
-  _staminaBarImageBG: {fileID: 0}
+  FieldOfVision: 60
+  _staminaThreshold: 60
+  _jumpPower: 5
+  _crouchingHeight: 1.5
+  _standingHeight: 2
+  _walkBobSpeed: 14
+  _walkBobAmount: 0.05
+  _sprintBobSpeed: 18
+  _sprintBobAmount: 0.11
+  _crouchBobSpeed: 8
+  _crouchBobAmount: 0.025
 --- !u!136 &1248588139
 CapsuleCollider:
   m_ObjectHideFlags: 0
