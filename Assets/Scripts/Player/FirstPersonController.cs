@@ -98,7 +98,6 @@ namespace Editor
 
         private float _defaultYPos = 0;
         private float _headBobTimer;
-        public bool PlayerCanHeadBob { get; private set; } = true;
         #endregion
         #endregion
 
@@ -169,11 +168,7 @@ namespace Editor
                     Jump();
                 }
             }
-
-            if (PlayerCanHeadBob)
-            {
-                HeadBob();
-            }
+            HeadBob();
             
             CheckGround();
 

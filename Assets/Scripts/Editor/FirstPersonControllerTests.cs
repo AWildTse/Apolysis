@@ -125,5 +125,16 @@ namespace Editor
                 Assert.AreEqual(true, FPC.IsActionAllowed(currentStamina, thresholdCheck, threshold));
             }
         }
+
+        public class CanPlayerActTests
+        {
+            private FirstPersonController FPC;
+
+            [SetUp]
+            public void beforeEveryTest()
+            {
+                FPC = new GameObject().AddComponent<FirstPersonController>();
+            }
+        }
     }
 }
