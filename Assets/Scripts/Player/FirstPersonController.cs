@@ -98,7 +98,6 @@ namespace Editor
 
         private float _defaultYPos = 0;
         private float _headBobTimer;
-        public bool PlayerCanHeadBob { get; private set; } = true;
         #endregion
         #endregion
 
@@ -154,12 +153,12 @@ namespace Editor
 
             if (CameraCanMove)
             {
-                HandleMouseMovement();
+                MouseMovement();
             }
 
             if (PlayerCanMove)
             {
-                HandlePlayerMovement();
+                PlayerMovement();
             }
 
             if (PlayerCanJump)
@@ -169,11 +168,7 @@ namespace Editor
                     Jump();
                 }
             }
-
-            if (PlayerCanHeadBob)
-            {
-                HeadBob();
-            }
+            HeadBob();
             
             CheckGround();
 
@@ -196,11 +191,94 @@ namespace Editor
             TestHPAndSPBars();
         }
 
+        public void MouseMovement()
+        {
+            _camera.transform.localEulerAngles = CalculateMouseMovement(
+                    _unityService.GetAxisRaw("Mouse X"),
+                    _unityService.GetAxisRaw("Mouse Y"),
+                    _horizontalMouseSensitivity,
+                    _verticalMouseSensitivity);
+        }
+
+        public void PlayerMovement()
+        {
+            DecideSpeed(_player.CurrentStamina, _player.MaximumStamina, _staminaThresholdCheck, _staminaThreshold);
+        }
+
+        public bool CanPlayerSprint(float stamina, bool thresholdCheck, float threshold)
+        {
+            if (stamina == 0)
+            {
+                thresholdCheck = true;
+                return false;
+            }
+            if (stamina < threshold && thresholdCheck == true)
+            {
+                return false;
+            }
+            if (stamina >= threshold)
+            {
+                thresholdCheck = false;
+                return true;
+            }
+            thresholdCheck = false;
+            return true;
+        }
+
+        public void DecideSpeed(float currentStamina, float maxStamina, bool thresholdCheck, float threshold)
+        {
+            bool sprint = Input.GetButton("Sprint");
+            if (sprint && (CanPlayerSprint(currentStamina, thresholdCheck, threshold) == true))
+            {
+                _isSprinting = true;
+                _isWalking = false;
+                _player.Sprint(_staminaDepleteAmount);
+                transform.localPosition += ReturnPosition(_runningSpeed);
+            }
+            else if (CanPlayerSprint(currentStamina, thresholdCheck, threshold) == false)
+            {
+                _isSprinting = false;
+                _isWalking = true;
+                _player.Rest(_staminaRestoreAmount);
+                transform.localPosition += ReturnPosition(_walkingSpeed);
+            }
+            else if (currentStamina == maxStamina)
+            {
+                _isSprinting = false;
+                _isWalking = true;
+                transform.localPosition += ReturnPosition(_walkingSpeed);
+            }
+            else if (CanPlayerSprint(currentStamina, thresholdCheck, threshold) == true)
+            {
+                _isSprinting = false;
+                _isWalking = true;
+                _player.Rest(_staminaRestoreAmount);
+                transform.localPosition += ReturnPosition(_walkingSpeed);
+            }
+        }
+
         public void Jump()
         {
             _rigidbody.AddForce(0f, _jumpPower, 0f, ForceMode.Impulse);
             _isGrounded = false;
             _isWalking = false;
+        }
+
+        public void CheckGround()
+        {
+            Vector3 origin = new Vector3(transform.position.x, transform.position.y - (transform.localScale.y * .5f), transform.position.z);
+            Vector3 direction = transform.TransformDirection(Vector3.down);
+            float distance = .75f;
+
+            if (Physics.Raycast(origin, direction, out RaycastHit hit, distance))
+            {
+                Debug.DrawRay(origin, direction * distance, Color.red);
+                _isGrounded = true;
+            }
+            else
+            {
+                _isGrounded = false;
+            }
         }
 
         public void Crouch()
@@ -220,56 +298,6 @@ namespace Editor
 
                 _isCrouched = true;
                 _isWalking = false;
-            }
-        }
-
-        public IEnumerator SmoothCrouchCoroutine(float standingHeight, float crouchingHeight)
-        {
-            if (_isCrouched)
-            {
-                float math;
-                for (math = standingHeight - crouchingHeight; math > 0; math -= 0.1f)
-                {
-                    _capsuleCollider.height += 0.1f;
-                    yield return new WaitForSecondsRealtime(.01f);
-                }
-            }
-            else
-            {
-                float math;
-                for (math = standingHeight - crouchingHeight; math > 0; math -= 0.1f)
-                {
-                    _capsuleCollider.height -= 0.1f;
-                    yield return new WaitForSecondsRealtime(.01f);
-                }
-            }
-        }
-
-        public IEnumerator CheckPositionCoroutine()
-        {
-            _positionCoroutineStarted = true;
-
-            _newPosition = transform.localPosition;
-
-            yield return new WaitForSecondsRealtime(.01f);
-
-            _oldPosition = _newPosition;
-        }
-
-        public void CheckGround()
-        {
-            Vector3 origin = new Vector3(transform.position.x, transform.position.y - (transform.localScale.y * .5f), transform.position.z);
-            Vector3 direction = transform.TransformDirection(Vector3.down);
-            float distance = .75f;
-
-            if (Physics.Raycast(origin, direction, out RaycastHit hit, distance))
-            {
-                Debug.DrawRay(origin, direction * distance, Color.red);
-                _isGrounded = true;
-            }
-            else
-            {
-                _isGrounded = false;
             }
         }
 
@@ -307,21 +335,40 @@ namespace Editor
             else
             {
                 Debug.Log("They're the same value");
-            }    
+            }
         }
 
-        public void HandleMouseMovement()
+        public IEnumerator SmoothCrouchCoroutine(float standingHeight, float crouchingHeight)
         {
-            _camera.transform.localEulerAngles = CalculateMouseMovement(
-                    _unityService.GetAxisRaw("Mouse X"),
-                    _unityService.GetAxisRaw("Mouse Y"),
-                    _horizontalMouseSensitivity,
-                    _verticalMouseSensitivity);
+            if (_isCrouched)
+            {
+                float math;
+                for (math = standingHeight - crouchingHeight; math > 0; math -= 0.1f)
+                {
+                    _capsuleCollider.height += 0.1f;
+                    yield return new WaitForSecondsRealtime(.01f);
+                }
+            }
+            else
+            {
+                float math;
+                for (math = standingHeight - crouchingHeight; math > 0; math -= 0.1f)
+                {
+                    _capsuleCollider.height -= 0.1f;
+                    yield return new WaitForSecondsRealtime(.01f);
+                }
+            }
         }
 
-        public void HandlePlayerMovement()
+        public IEnumerator CheckPositionCoroutine()
         {
-            DecideSpeed(_player.CurrentStamina, _player.MaximumStamina, _staminaThresholdCheck, _staminaThreshold);
+            _positionCoroutineStarted = true;
+
+            _newPosition = transform.localPosition;
+
+            yield return new WaitForSecondsRealtime(.01f);
+
+            _oldPosition = _newPosition;
         }
 
         public Vector3 CalculateMouseMovement(float horizontal, float vertical, float hSpeed, float vSpeed)
@@ -345,58 +392,6 @@ namespace Editor
             Vector3 move = (transform.right * x) + (transform.forward * z);
 
             return move;
-        }
-
-        public bool IsActionAllowed(float stamina, bool thresholdCheck, float threshold)
-        {
-            if (stamina == 0)
-            {
-                thresholdCheck = true;
-                return false;
-            }
-            if (stamina < threshold && thresholdCheck == true)
-            {
-                return false;
-            }
-            if (stamina >= threshold)
-            {
-                thresholdCheck = false;
-                return true;
-            }
-            thresholdCheck = false;
-            return true;
-        }
-
-        public void DecideSpeed(float currentStamina, float maxStamina, bool thresholdCheck, float threshold)
-        {
-            bool sprint = Input.GetButton("Sprint");
-            if (sprint && (IsActionAllowed(currentStamina, thresholdCheck, threshold) == true))
-            {
-                _isSprinting = true;
-                _isWalking = false;
-                _player.Sprint(_staminaDepleteAmount);
-                transform.localPosition += ReturnPosition(_runningSpeed);
-            }
-            else if (IsActionAllowed(currentStamina, thresholdCheck, threshold) == false)
-            {
-                _isSprinting = false;
-                _isWalking = true;
-                _player.Rest(_staminaRestoreAmount);
-                transform.localPosition += ReturnPosition(_walkingSpeed);
-            }
-            else if (currentStamina == maxStamina)
-            {
-                _isSprinting = false;
-                _isWalking = true;
-                transform.localPosition += ReturnPosition(_walkingSpeed);
-            }
-            else if (IsActionAllowed(currentStamina, thresholdCheck, threshold) == true)
-            {
-                _isSprinting = false;
-                _isWalking = true;
-                _player.Rest(_staminaRestoreAmount);
-                transform.localPosition += ReturnPosition(_walkingSpeed);
-            }
         }
 
         public Vector3 ReturnPosition(int speed)
