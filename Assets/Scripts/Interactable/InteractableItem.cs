@@ -6,7 +6,7 @@ public class InteractableItem : Interactable
 {
     //field for inventory
 
-    //field for Item
+    public Item item;
 
     private void Start()
     {
@@ -15,8 +15,12 @@ public class InteractableItem : Interactable
 
     public override void Interact()
     {
-        //pick up code under Item class
-        throw new System.NotImplementedException();
-        
+        PickUp();
+    }
+
+    void PickUp()
+    {
+        Debug.Log("Picking up" + item.Name);
+        Destroy(gameObject);
     }
 }
