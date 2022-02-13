@@ -6,21 +6,16 @@ public class InteractableItem : Interactable
 {
     //field for inventory
 
-    public Item item;
+    private Item _item;
 
     private void Start()
     {
-        //initialize getComponent to item
+        _item = GetComponent<Item>();
     }
 
     public override void Interact()
     {
-        PickUp();
-    }
-
-    void PickUp()
-    {
-        Debug.Log("Picking up" + item.Name);
+        Debug.Log("Picking up" + _item.Name);
         Destroy(gameObject);
     }
 }

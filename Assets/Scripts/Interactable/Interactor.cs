@@ -4,5 +4,8 @@ using UnityEngine;
 
 public class Interactor : MonoBehaviour
 {
-    //put in code to interact
+    private float _rayDistance;
+    private float distance;
+
+    private GameObject _target;
 }
