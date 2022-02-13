@@ -191,120 +191,6 @@ namespace Editor
             TestHPAndSPBars();
         }
 
-        public void Jump()
-        {
-            _rigidbody.AddForce(0f, _jumpPower, 0f, ForceMode.Impulse);
-            _isGrounded = false;
-            _isWalking = false;
-        }
-
-        public void Crouch()
-        {
-            if (_isCrouched)
-            {
-                StartCoroutine(SmoothCrouchCoroutine(_standingHeight, _crouchingHeight));
-                _walkingSpeed /= _crouchingSpeedMultiplier;
-
-                _isCrouched = false;
-                _isWalking = true;
-            }
-            else
-            {
-                StartCoroutine(SmoothCrouchCoroutine(_standingHeight, _crouchingHeight));
-                _walkingSpeed *= _crouchingSpeedMultiplier;
-
-                _isCrouched = true;
-                _isWalking = false;
-            }
-        }
-
-        public IEnumerator SmoothCrouchCoroutine(float standingHeight, float crouchingHeight)
-        {
-            if (_isCrouched)
-            {
-                float math;
-                for (math = standingHeight - crouchingHeight; math > 0; math -= 0.1f)
-                {
-                    _capsuleCollider.height += 0.1f;
-                    yield return new WaitForSecondsRealtime(.01f);
-                }
-            }
-            else
-            {
-                float math;
-                for (math = standingHeight - crouchingHeight; math > 0; math -= 0.1f)
-                {
-                    _capsuleCollider.height -= 0.1f;
-                    yield return new WaitForSecondsRealtime(.01f);
-                }
-            }
-        }
-
-        public IEnumerator CheckPositionCoroutine()
-        {
-            _positionCoroutineStarted = true;
-
-            _newPosition = transform.localPosition;
-
-            yield return new WaitForSecondsRealtime(.01f);
-
-            _oldPosition = _newPosition;
-        }
-
-        public void CheckGround()
-        {
-            Vector3 origin = new Vector3(transform.position.x, transform.position.y - (transform.localScale.y * .5f), transform.position.z);
-            Vector3 direction = transform.TransformDirection(Vector3.down);
-            float distance = .75f;
-
-            if (Physics.Raycast(origin, direction, out RaycastHit hit, distance))
-            {
-                Debug.DrawRay(origin, direction * distance, Color.red);
-                _isGrounded = true;
-            }
-            else
-            {
-                _isGrounded = false;
-            }
-        }
-
-        public void HeadBob()
-        {
-            if (!_isGrounded) return;
-
-            Debug.Log("_oldPosition: " + _oldPosition);
-            Debug.Log("transform.position: " + transform.localPosition);
-
-            if (_newPosition != _oldPosition)
-            {
-                if (_isSprinting)
-                {
-                    _headBobTimer += _unityService.GetDeltaTime() * _sprintBobSpeed;
-                    _camera.transform.localPosition = new Vector3(
-                        _camera.transform.localPosition.x,
-                        _defaultYPos + Mathf.Sin(_headBobTimer) * _sprintBobAmount);
-                }
-                else if (_isCrouched)
-                {
-                    _headBobTimer += _unityService.GetDeltaTime() * _crouchBobSpeed;
-                    _camera.transform.localPosition = new Vector3(
-                        _camera.transform.localPosition.x,
-                        _defaultYPos + Mathf.Sin(_headBobTimer) * _crouchBobAmount);
-                }
-                else if (_isWalking)
-                {
-                    _headBobTimer += _unityService.GetDeltaTime() * _walkBobSpeed;
-                    _camera.transform.localPosition = new Vector3(
-                        _camera.transform.localPosition.x,
-                        _defaultYPos + Mathf.Sin(_headBobTimer) * _walkBobAmount);
-                }
-            }
-            else
-            {
-                Debug.Log("They're the same value");
-            }    
-        }
-
         public void MouseMovement()
         {
             _camera.transform.localEulerAngles = CalculateMouseMovement(
@@ -317,29 +203,6 @@ namespace Editor
         public void PlayerMovement()
         {
             DecideSpeed(_player.CurrentStamina, _player.MaximumStamina, _staminaThresholdCheck, _staminaThreshold);
-        }
-
-        public Vector3 CalculateMouseMovement(float horizontal, float vertical, float hSpeed, float vSpeed)
-        {
-            float mouseX = horizontal * hSpeed;
-            float mouseY = vertical * vSpeed;
-
-            _yRotation += mouseX;
-            _xRotation -= mouseY;
-            _xRotation = Mathf.Clamp(_xRotation, -90, 50);
-            transform.localEulerAngles = new Vector3(0, _yRotation, 0);
-
-            return new Vector3(_xRotation, 0, 0);
-        }
-
-        public Vector3 CalculateMovement(float horizontal, float vertical, float deltaTime, float speed)
-        {
-            float x = horizontal * speed * deltaTime;
-            float z = vertical * speed * deltaTime;
-
-            Vector3 move = (transform.right * x) + (transform.forward * z);
-
-            return move;
         }
 
         public bool CanPlayerSprint(float stamina, bool thresholdCheck, float threshold)
@@ -392,6 +255,143 @@ namespace Editor
                 _player.Rest(_staminaRestoreAmount);
                 transform.localPosition += ReturnPosition(_walkingSpeed);
             }
+        }
+
+        public void Jump()
+        {
+            _rigidbody.AddForce(0f, _jumpPower, 0f, ForceMode.Impulse);
+            _isGrounded = false;
+            _isWalking = false;
+        }
+
+        public void CheckGround()
+        {
+            Vector3 origin = new Vector3(transform.position.x, transform.position.y - (transform.localScale.y * .5f), transform.position.z);
+            Vector3 direction = transform.TransformDirection(Vector3.down);
+            float distance = .75f;
+
+            if (Physics.Raycast(origin, direction, out RaycastHit hit, distance))
+            {
+                Debug.DrawRay(origin, direction * distance, Color.red);
+                _isGrounded = true;
+            }
+            else
+            {
+                _isGrounded = false;
+            }
+        }
+
+        public void Crouch()
+        {
+            if (_isCrouched)
+            {
+                StartCoroutine(SmoothCrouchCoroutine(_standingHeight, _crouchingHeight));
+                _walkingSpeed /= _crouchingSpeedMultiplier;
+
+                _isCrouched = false;
+                _isWalking = true;
+            }
+            else
+            {
+                StartCoroutine(SmoothCrouchCoroutine(_standingHeight, _crouchingHeight));
+                _walkingSpeed *= _crouchingSpeedMultiplier;
+
+                _isCrouched = true;
+                _isWalking = false;
+            }
+        }
+
+        public void HeadBob()
+        {
+            if (!_isGrounded) return;
+
+            Debug.Log("_oldPosition: " + _oldPosition);
+            Debug.Log("transform.position: " + transform.localPosition);
+
+            if (_newPosition != _oldPosition)
+            {
+                if (_isSprinting)
+                {
+                    _headBobTimer += _unityService.GetDeltaTime() * _sprintBobSpeed;
+                    _camera.transform.localPosition = new Vector3(
+                        _camera.transform.localPosition.x,
+                        _defaultYPos + Mathf.Sin(_headBobTimer) * _sprintBobAmount);
+                }
+                else if (_isCrouched)
+                {
+                    _headBobTimer += _unityService.GetDeltaTime() * _crouchBobSpeed;
+                    _camera.transform.localPosition = new Vector3(
+                        _camera.transform.localPosition.x,
+                        _defaultYPos + Mathf.Sin(_headBobTimer) * _crouchBobAmount);
+                }
+                else if (_isWalking)
+                {
+                    _headBobTimer += _unityService.GetDeltaTime() * _walkBobSpeed;
+                    _camera.transform.localPosition = new Vector3(
+                        _camera.transform.localPosition.x,
+                        _defaultYPos + Mathf.Sin(_headBobTimer) * _walkBobAmount);
+                }
+            }
+            else
+            {
+                Debug.Log("They're the same value");
+            }
+        }
+
+        public IEnumerator SmoothCrouchCoroutine(float standingHeight, float crouchingHeight)
+        {
+            if (_isCrouched)
+            {
+                float math;
+                for (math = standingHeight - crouchingHeight; math > 0; math -= 0.1f)
+                {
+                    _capsuleCollider.height += 0.1f;
+                    yield return new WaitForSecondsRealtime(.01f);
+                }
+            }
+            else
+            {
+                float math;
+                for (math = standingHeight - crouchingHeight; math > 0; math -= 0.1f)
+                {
+                    _capsuleCollider.height -= 0.1f;
+                    yield return new WaitForSecondsRealtime(.01f);
+                }
+            }
+        }
+
+        public IEnumerator CheckPositionCoroutine()
+        {
+            _positionCoroutineStarted = true;
+
+            _newPosition = transform.localPosition;
+
+            yield return new WaitForSecondsRealtime(.01f);
+
+            _oldPosition = _newPosition;
+        }
+
+        public Vector3 CalculateMouseMovement(float horizontal, float vertical, float hSpeed, float vSpeed)
+        {
+            float mouseX = horizontal * hSpeed;
+            float mouseY = vertical * vSpeed;
+
+            _yRotation += mouseX;
+            _xRotation -= mouseY;
+            _xRotation = Mathf.Clamp(_xRotation, -90, 50);
+            transform.localEulerAngles = new Vector3(0, _yRotation, 0);
+
+            return new Vector3(_xRotation, 0, 0);
+        }
+
+        public Vector3 CalculateMovement(float horizontal, float vertical, float deltaTime, float speed)
+        {
+            float x = horizontal * speed * deltaTime;
+            float z = vertical * speed * deltaTime;
+
+            Vector3 move = (transform.right * x) + (transform.forward * z);
+
+            return move;
         }
 
         public Vector3 ReturnPosition(int speed)

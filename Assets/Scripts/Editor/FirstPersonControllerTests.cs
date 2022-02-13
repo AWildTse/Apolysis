@@ -93,21 +93,21 @@ namespace Editor
             {
                 currentStamina = 100;
                 thresholdCheck = false;
-                Assert.AreEqual(true, FPC.IsActionAllowed(currentStamina, thresholdCheck, threshold));
+                Assert.AreEqual(true, FPC.CanPlayerSprint(currentStamina, thresholdCheck, threshold));
             }
             [Test]
             public void Check_If_Sprinting_Is_Okay_Above_0()
             {
                 currentStamina = 1;
                 thresholdCheck = false;
-                Assert.AreEqual(true, FPC.IsActionAllowed(currentStamina, thresholdCheck, threshold));
+                Assert.AreEqual(true, FPC.CanPlayerSprint(currentStamina, thresholdCheck, threshold));
             }
             [Test]
             public void Check_If_Sprinting_Is_Okay_At_0()
             {
                 currentStamina = 0;
                 thresholdCheck = true;
-                Assert.AreEqual(false, FPC.IsActionAllowed(currentStamina, thresholdCheck, threshold));
+                Assert.AreEqual(false, FPC.CanPlayerSprint(currentStamina, thresholdCheck, threshold));
             }
             [Test]
             public void Check_If_Sprinting_Is_Okay_At_50_After_Capping()
@@ -115,14 +115,14 @@ namespace Editor
                 currentStamina = 50;
                 thresholdCheck = true;
 
-                Assert.AreEqual(false, FPC.IsActionAllowed(currentStamina, thresholdCheck, threshold));
+                Assert.AreEqual(false, FPC.CanPlayerSprint(currentStamina, thresholdCheck, threshold));
             }
             [Test]
             public void Check_If_Sprinting_Is_Okay_At_60_After_Capping()
             {
                 currentStamina = 60;
                 thresholdCheck = false;
-                Assert.AreEqual(true, FPC.IsActionAllowed(currentStamina, thresholdCheck, threshold));
+                Assert.AreEqual(true, FPC.CanPlayerSprint(currentStamina, thresholdCheck, threshold));
             }
         }
 
