@@ -153,12 +153,12 @@ namespace Editor
 
             if (CameraCanMove)
             {
-                HandleMouseMovement();
+                MouseMovement();
             }
 
             if (PlayerCanMove)
             {
-                HandlePlayerMovement();
+                PlayerMovement();
             }
 
             if (PlayerCanJump)
@@ -305,7 +305,7 @@ namespace Editor
             }    
         }
 
-        public void HandleMouseMovement()
+        public void MouseMovement()
         {
             _camera.transform.localEulerAngles = CalculateMouseMovement(
                     _unityService.GetAxisRaw("Mouse X"),
@@ -314,7 +314,7 @@ namespace Editor
                     _verticalMouseSensitivity);
         }
 
-        public void HandlePlayerMovement()
+        public void PlayerMovement()
         {
             DecideSpeed(_player.CurrentStamina, _player.MaximumStamina, _staminaThresholdCheck, _staminaThreshold);
         }
@@ -342,7 +342,7 @@ namespace Editor
             return move;
         }
 
-        public bool IsActionAllowed(float stamina, bool thresholdCheck, float threshold)
+        public bool CanPlayerSprint(float stamina, bool thresholdCheck, float threshold)
         {
             if (stamina == 0)
             {
@@ -365,14 +365,14 @@ namespace Editor
         public void DecideSpeed(float currentStamina, float maxStamina, bool thresholdCheck, float threshold)
         {
             bool sprint = Input.GetButton("Sprint");
-            if (sprint && (IsActionAllowed(currentStamina, thresholdCheck, threshold) == true))
+            if (sprint && (CanPlayerSprint(currentStamina, thresholdCheck, threshold) == true))
             {
                 _isSprinting = true;
                 _isWalking = false;
                 _player.Sprint(_staminaDepleteAmount);
                 transform.localPosition += ReturnPosition(_runningSpeed);
             }
-            else if (IsActionAllowed(currentStamina, thresholdCheck, threshold) == false)
+            else if (CanPlayerSprint(currentStamina, thresholdCheck, threshold) == false)
             {
                 _isSprinting = false;
                 _isWalking = true;
@@ -385,7 +385,7 @@ namespace Editor
                 _isWalking = true;
                 transform.localPosition += ReturnPosition(_walkingSpeed);
             }
-            else if (IsActionAllowed(currentStamina, thresholdCheck, threshold) == true)
+            else if (CanPlayerSprint(currentStamina, thresholdCheck, threshold) == true)
             {
                 _isSprinting = false;
                 _isWalking = true;
