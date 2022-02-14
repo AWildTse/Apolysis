@@ -45,7 +45,7 @@ public class Interactor : MonoBehaviour
 
     public void RemoveFromListOutOfRange()
     {
-        //this check whether or not the list is completely empty. It'll just clear out everything
+        //this checks whether or not the list is completely empty. It'll just clear out everything
         //should only really be called when there is one item left, but this will clean up any
         //missed _interactableItems
         if (PickUpCollidersListEmpty())
@@ -53,6 +53,34 @@ public class Interactor : MonoBehaviour
             for (int i = 0; i < _interactableItems.Count; i++)
             {
                 _interactableItems.RemoveAt(i);
+            }
+        }
+        //As long as there is at least one _interactableItem nearby, we cycle through list
+        //_interactableItems. 
+        else if(_interactableItems.Count > 0)
+        {
+            for (int i = 0; i < _interactableItems.Count; i++)
+            {
+                int count = 0;
+                _interactableItem = _interactableItems[i];
+                //We cycle through the colliders list
+                foreach (var pickup in _pickUpObjectColliders)
+                {
+                    //check if the collider list's first item's name is equal to the
+                    // _interactableItem name
+                    if (pickup.name != _interactableItem.name)
+                    {
+                        //If they're not, we add to the count                        
+                        count++;
+                    }
+                    //If the count equals _pickUpObjectColliders list length, we know
+                    //the _interactableItem is no longer within the radius
+                    //so we remove it from the list of _interactableItems
+                    if(count == _pickUpObjectColliders.Length)
+                    {
+                        _interactableItems.Remove(_interactableItem);
+                    }
+                }
             }
         }
     }
