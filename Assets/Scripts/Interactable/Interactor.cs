@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class Interactor : MonoBehaviour
 {
-    private float _rayDistance;
+    #region Interactable Items and Collider Variables
     [SerializeField] private List<InteractableItem> _interactableItems;
-    [SerializeField] private InteractableItem _interactableItem;
+    [Tooltip("The radius around the player that detects nearby _interactableItems")]
     [SerializeField] private float _radius = 3f;
-    [SerializeField] private Collider[] _pickUpObjectColliders;
+    private InteractableItem _interactableItem;
+    private Collider[] _pickUpObjectColliders;
+    #endregion
+
+    #region Raycasting And LayerMask Variables
+    private float _rayDistance;
     private Camera _camera;
     private int _pickUpObjectLayerMask;
-
-    private GameObject _target;
+    #endregion
 
     private void Start()
     {
@@ -23,6 +27,7 @@ public class Interactor : MonoBehaviour
 
     private void Update()
     {
+        //Continuously update collision colliders within a radius around the user for pickupable objects
         _pickUpObjectColliders = Physics.OverlapSphere(transform.position, _radius, _pickUpObjectLayerMask);
         RayCast();
         CheckRadiusForPickUps();
@@ -36,6 +41,7 @@ public class Interactor : MonoBehaviour
             GameObject go = pickup.gameObject;
             _interactableItem = go.GetComponent<InteractableItem>();
 
+            //As long as our _interactableItems list doesn't already contain the item, we add it
             if (!_interactableItems.Contains(_interactableItem))
             {
                 _interactableItems.Add(_interactableItem);
@@ -88,20 +94,12 @@ public class Interactor : MonoBehaviour
     {
         if(_pickUpObjectColliders.Length > 0)
         {
-            Debug.Log("We have some pick up colliders");
             return false;
         }
         else
         {
-            Debug.Log("We don't have any pick up colliders");
             return true;
         }
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, _radius);
     }
 
     public void RayCast()
@@ -112,15 +110,9 @@ public class Interactor : MonoBehaviour
         {
             if (hit.collider.tag == "PickUpObject")
             {
-                Debug.Log("collider tag hit");
-                foreach (var item in _interactableItems)
-                {
-                    Debug.Log("item name in _interactableItems list: " + item.name);
-                }
-
                 if (Input.GetButtonDown("PickUp"))
                 {
-                    //_interactableItem.Interact();
+                    _interactableItem.Interact();
                 }
             }
         }
