@@ -55,27 +55,27 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Player\FirstPersonController.cs" />
     <Compile Include="Assets\Scripts\Infrastructure\An.cs" />
+    <Compile Include="Assets\Scripts\Item\Equipable\Weapon\Ranged Weapon\RangedWeapon.cs" />
     <Compile Include="Assets\Scripts\Player\Player.cs" />
+    <Compile Include="Assets\Scripts\ExperimentalToolTipText.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IUnityService.cs" />
+    <Compile Include="Assets\Scripts\Item\IItem.cs" />
+    <Compile Include="Assets\Scripts\Interactable\Interactable.cs" />
     <Compile Include="Assets\Scripts\Infrastructure\StaminaBarBuilder.cs" />
     <Compile Include="Assets\Scripts\Infrastructure\ImageBuilder.cs" />
     <Compile Include="Assets\Scripts\Infrastructure\TestDataBuilder.cs" />
+    <Compile Include="Assets\Scripts\Item\Item.cs" />
+    <Compile Include="Assets\Scripts\Item\KeyItem.cs" />
     <Compile Include="Assets\Scripts\Infrastructure\A.cs" />
+    <Compile Include="Assets\Scripts\Interactable\InteractableItem.cs" />
+    <Compile Include="Assets\Scripts\Item\Equipable\Weapon\Weapon.cs" />
     <Compile Include="Assets\Scripts\UI\HealthBar.cs" />
     <Compile Include="Assets\ModularFirstPersonController\FirstPersonController\FirstPersonController.cs" />
     <Compile Include="Assets\Scripts\UI\StaminaBar.cs" />
     <Compile Include="Assets\Scripts\Infrastructure\HealthBarBuilder.cs" />
     <Compile Include="Assets\Scripts\Infrastructure\PlayerBuilder.cs" />
-    <Compile Include="Assets\Scripts\Interactable\Interactor.cs" />
-    <Compile Include="Assets\Scripts\Interactable\Interactable.cs" />
-    <Compile Include="Assets\Scripts\Interactable\InteractableItem.cs" />
-    <Compile Include="Assets\Scripts\Item\IItem.cs" />
-    <Compile Include="Assets\Scripts\Item\Item.cs" />
-    <Compile Include="Assets\Scripts\Item\KeyItem.cs" />
     <Compile Include="Assets\Scripts\Item\Equipable\IEquipable.cs" />
-    <Compile Include="Assets\Scripts\Item\Equipable\Weapon\Weapon.cs" />
-    <Compile Include="Assets\Scripts\Item\Equipable\Weapon\Ranged Weapon\RangedWeapon.cs" />
-    <Compile Include="Assets\Scripts\ExperimentalToolTipText.cs" />
+    <Compile Include="Assets\Scripts\Interactable\Interactor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\JapaneseAlley\README.txt" />

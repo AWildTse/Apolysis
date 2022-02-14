@@ -15,6 +15,7 @@ public class InteractableItem : Interactable
 
     public override void Interact()
     {
-        Destroy(gameObject);
+        Debug.Log("Inside Interact for InteractableItem");
+        //Destroy(gameObject);
     }
 }

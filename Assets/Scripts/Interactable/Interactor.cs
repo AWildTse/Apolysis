@@ -5,76 +5,77 @@ using UnityEngine;
 public class Interactor : MonoBehaviour
 {
     #region Interactable Items and Collider Variables
-    [SerializeField] private List<InteractableItem> _interactableItems;
+    [SerializeField] private List<Interactable> _interactables;
     [Tooltip("The radius around the player that detects nearby _interactableItems")]
     [SerializeField] private float _radius = 3f;
-    private InteractableItem _interactableItem;
-    private Collider[] _pickUpObjectColliders;
+    [SerializeField] Interactable _interactable;
+    private Collider[] _interactableCollider;
     #endregion
 
     #region Raycasting And LayerMask Variables
     private float _rayDistance;
     private Camera _camera;
-    private int _pickUpObjectLayerMask;
+    private int _interactableLayerMask;
     #endregion
 
     private void Start()
     {
         _camera = GetComponentInChildren<Camera>();
         _rayDistance = 3f;
-        _pickUpObjectLayerMask = 1 << 6;
+        _interactableLayerMask = 1 << 6;
     }
 
     private void Update()
     {
         //Continuously update collision colliders within a radius around the user for pickupable objects
-        _pickUpObjectColliders = Physics.OverlapSphere(transform.position, _radius, _pickUpObjectLayerMask);
+        _interactableCollider = Physics.OverlapSphere(transform.position, _radius, _interactableLayerMask);
         RayCast();
-        CheckRadiusForPickUps();
-        RemoveFromListOutOfRange();
+        CheckRadiusForInteractables();
+        RemoveInteractableOutOfRange();
     }
 
-    public void CheckRadiusForPickUps()
+    public void CheckRadiusForInteractables()
     {
-        foreach (var pickup in _pickUpObjectColliders)
+        foreach (var pickup in _interactableCollider)
         {
             GameObject go = pickup.gameObject;
-            _interactableItem = go.GetComponent<InteractableItem>();
+            _interactable = go.GetComponent<InteractableItem>();
+            //_interactableItem = go.GetComponent<InteractableItem>();
 
             //As long as our _interactableItems list doesn't already contain the item, we add it
-            if (!_interactableItems.Contains(_interactableItem))
+            if (!_interactables.Contains(_interactable))
             {
-                _interactableItems.Add(_interactableItem);
+                _interactables.Add(_interactable);
             }
         }
     }
 
-    public void RemoveFromListOutOfRange()
+    public void RemoveInteractableOutOfRange()
     {
         //this checks whether or not the list is completely empty. It'll just clear out everything
         //should only really be called when there is one item left, but this will clean up any
         //missed _interactableItems
-        if (PickUpCollidersListEmpty())
+        if (InteractableColliderIsEmpty())
         {
-            for (int i = 0; i < _interactableItems.Count; i++)
+            for (int i = 0; i < _interactables.Count; i++)
             {
-                _interactableItems.RemoveAt(i);
+                _interactables.RemoveAt(i);
             }
         }
         //As long as there is at least one _interactableItem nearby, we cycle through list
         //_interactableItems. 
-        else if(_interactableItems.Count > 0)
+        else if(_interactables.Count > 0)
         {
-            for (int i = 0; i < _interactableItems.Count; i++)
+            for (int i = 0; i < _interactables.Count; i++)
             {
                 int count = 0;
-                _interactableItem = _interactableItems[i];
+                _interactable = _interactables[i];
                 //We cycle through the colliders list
-                foreach (var pickup in _pickUpObjectColliders)
+                foreach (var pickup in _interactableCollider)
                 {
                     //check if the collider list's first item's name is equal to the
                     // _interactableItem name
-                    if (pickup.name != _interactableItem.name)
+                    if (pickup.name != _interactable.name)
                     {
                         //If they're not, we add to the count                        
                         count++;
@@ -82,17 +83,17 @@ public class Interactor : MonoBehaviour
                     //If the count equals _pickUpObjectColliders list length, we know
                     //the _interactableItem is no longer within the radius
                     //so we remove it from the list of _interactableItems
-                    if(count == _pickUpObjectColliders.Length)
+                    if(count == _interactableCollider.Length)
                     {
-                        _interactableItems.Remove(_interactableItem);
+                        _interactables.Remove(_interactable);
                     }
                 }
             }
         }
     }
-    public bool PickUpCollidersListEmpty()
+    public bool InteractableColliderIsEmpty()
     {
-        if(_pickUpObjectColliders.Length > 0)
+        if(_interactableCollider.Length > 0)
         {
             return false;
         }
@@ -105,15 +106,28 @@ public class Interactor : MonoBehaviour
     public void RayCast()
     {
         RaycastHit hit;
+        GameObject interactable;
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+        //If we hit something raycasting
         if (Physics.Raycast(ray, out hit, _rayDistance))
         {
-            if (hit.collider.tag == "PickUpObject")
+            //We check if it's an InteractableObject (If we add LayerMask to Physics.raycast
+            //we might be able to skip this check)
+            if (hit.collider.tag == "InteractableObject")
             {
-                if (Input.GetButtonDown("PickUp"))
+                interactable = hit.collider.gameObject;
+                for(int i = 0; i < _interactables.Count; i++)
                 {
-                    _interactableItem.Interact();
-                }
+                    //check nearby interactables to see if any of them match
+                    if(interactable.name == _interactables[i].name)
+                    {
+                        //We use that object in the list to Interact() if they do match
+                        if (Input.GetButtonDown("Interact"))
+                        {
+                            _interactables[i].Interact();
+                        }
+                    }
+                }      
             }
         }
     }    

@@ -983,10 +983,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dd41a4307b690e499454d4af5755fb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _interactables: []
   _interactableItems: []
-  _interactableItem: {fileID: 0}
   _radius: 3
-  _pickUpObjectColliders: []
+  _interactableItem: {fileID: 0}
+  _interactable: {fileID: 0}
 --- !u!1 &1350728669
 GameObject:
   m_ObjectHideFlags: 0
