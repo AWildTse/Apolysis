@@ -75,6 +75,7 @@
     <Compile Include="Assets\Scripts\Item\Equipable\IEquipable.cs" />
     <Compile Include="Assets\Scripts\Item\Equipable\Weapon\Weapon.cs" />
     <Compile Include="Assets\Scripts\Item\Equipable\Weapon\Ranged Weapon\RangedWeapon.cs" />
+    <Compile Include="Assets\Scripts\ExperimentalToolTipText.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\JapaneseAlley\README.txt" />

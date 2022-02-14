@@ -305,9 +305,6 @@ namespace Editor
         {
             if (!_isGrounded) return;
 
-            Debug.Log("_oldPosition: " + _oldPosition);
-            Debug.Log("transform.position: " + transform.localPosition);
-
             if (_newPosition != _oldPosition)
             {
                 if (_isSprinting)
@@ -331,10 +328,6 @@ namespace Editor
                         _camera.transform.localPosition.x,
                         _defaultYPos + Mathf.Sin(_headBobTimer) * _walkBobAmount);
                 }
-            }
-            else
-            {
-                Debug.Log("They're the same value");
             }
         }
 
