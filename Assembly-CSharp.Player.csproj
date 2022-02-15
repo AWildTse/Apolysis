@@ -76,6 +76,9 @@
     <Compile Include="Assets\Scripts\Infrastructure\PlayerBuilder.cs" />
     <Compile Include="Assets\Scripts\Item\Equipable\IEquipable.cs" />
     <Compile Include="Assets\Scripts\Interactable\Interactor.cs" />
+    <Compile Include="Assets\Scripts\Inventory\IInventory.cs" />
+    <Compile Include="Assets\Scripts\Inventory\Inventory.cs" />
+    <Compile Include="Assets\Scripts\Inventory\PlayerInventory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\JapaneseAlley\README.txt" />

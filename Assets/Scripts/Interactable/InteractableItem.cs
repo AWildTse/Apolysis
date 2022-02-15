@@ -5,8 +5,7 @@ using UnityEngine;
 public class InteractableItem : Interactable
 {
     //field for inventory
-
-    private Item _item;
+    [SerializeField] private Item _item;
 
     private void Start()
     {

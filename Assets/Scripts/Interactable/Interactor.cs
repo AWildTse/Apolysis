@@ -27,20 +27,23 @@ public class Interactor : MonoBehaviour
 
     private void Update()
     {
-        //Continuously update collision colliders within a radius around the user for pickupable objects
-        _interactableCollider = Physics.OverlapSphere(transform.position, _radius, _interactableLayerMask);
+        FindAllNearbyInteractables();
         RayCast();
-        CheckRadiusForInteractables();
-        RemoveInteractableOutOfRange();
     }
 
-    public void CheckRadiusForInteractables()
+    public void FindAllNearbyInteractables()
     {
-        foreach (var pickup in _interactableCollider)
+        _interactableCollider = Physics.OverlapSphere(transform.position, _radius, _interactableLayerMask);
+        AddInteractables();
+        RemoveOutOfRangeInteractables();
+    }
+
+    public void AddInteractables()
+    {
+        foreach (var interactable in _interactableCollider)
         {
-            GameObject go = pickup.gameObject;
+            GameObject go = interactable.gameObject;
             _interactable = go.GetComponent<InteractableItem>();
-            //_interactableItem = go.GetComponent<InteractableItem>();
 
             //As long as our _interactableItems list doesn't already contain the item, we add it
             if (!_interactables.Contains(_interactable))
@@ -50,7 +53,7 @@ public class Interactor : MonoBehaviour
         }
     }
 
-    public void RemoveInteractableOutOfRange()
+    public void RemoveOutOfRangeInteractables()
     {
         //this checks whether or not the list is completely empty. It'll just clear out everything
         //should only really be called when there is one item left, but this will clean up any
@@ -71,11 +74,11 @@ public class Interactor : MonoBehaviour
                 int count = 0;
                 _interactable = _interactables[i];
                 //We cycle through the colliders list
-                foreach (var pickup in _interactableCollider)
+                foreach (var interactable in _interactableCollider)
                 {
                     //check if the collider list's first item's name is equal to the
-                    // _interactableItem name
-                    if (pickup.name != _interactable.name)
+                    //_interactableItem name
+                    if (interactable.name != _interactable.name)
                     {
                         //If they're not, we add to the count                        
                         count++;

@@ -195,7 +195,7 @@ GameObject:
   - component: {fileID: 190115705}
   m_Layer: 6
   m_Name: FirstAid (2)
-  m_TagString: PickUpObject
+  m_TagString: InteractableObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -984,9 +984,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interactables: []
-  _interactableItems: []
   _radius: 3
-  _interactableItem: {fileID: 0}
   _interactable: {fileID: 0}
 --- !u!1 &1350728669
 GameObject:
@@ -1104,7 +1102,7 @@ GameObject:
   - component: {fileID: 1841614145}
   m_Layer: 6
   m_Name: FirstAid (1)
-  m_TagString: PickUpObject
+  m_TagString: InteractableObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1301,7 +1299,7 @@ GameObject:
   - component: {fileID: 6303781946407191350}
   m_Layer: 6
   m_Name: FirstAid
-  m_TagString: PickUpObject
+  m_TagString: InteractableObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
