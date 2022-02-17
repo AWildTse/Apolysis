@@ -16,7 +16,7 @@ MonoBehaviour:
   Description: Sturdy, loud hand gun.
   Icon: {fileID: 0}
   IsStackable: 0
-  StackAmount: 0
+  MaxStackAmount: 1
   Damage: 100
   AmmoCapacity: 12
   AmmoType: {fileID: 0}

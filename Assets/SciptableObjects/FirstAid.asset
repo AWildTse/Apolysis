@@ -16,4 +16,4 @@ MonoBehaviour:
   Description: A Handy First Aid Kit to repair wounds
   Icon: {fileID: 0}
   IsStackable: 1
-  StackAmount: 10
+  MaxStackAmount: 5

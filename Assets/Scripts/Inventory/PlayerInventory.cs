@@ -4,10 +4,18 @@ using UnityEngine;
 
 public class PlayerInventory : Inventory
 {
-    [SerializeReference] private List<Item> _inventory;
+    [SerializeReference] public List<Item> Inventory;
+    [SerializeReference] public List<InventoryItem> numberOfItems;
+
+    private void Awake()
+    {
+        Inventory = new List<Item>();
+    }
+
     public override void AddToInventory(Item item)
     {
         Debug.Log("In AddToInventory");
+        
         //if exists, add to stack
         //else, add to inventory
     }
