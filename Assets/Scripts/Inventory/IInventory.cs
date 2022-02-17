@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface IInventory
 {
-    public void AddToInventory();
+    public void AddToInventory(Item item);
     public void RemoveFromInventory();
 }

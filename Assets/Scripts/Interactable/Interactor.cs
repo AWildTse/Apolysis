@@ -127,6 +127,7 @@ public class Interactor : MonoBehaviour
                         //We use that object in the list to Interact() if they do match
                         if (Input.GetButtonDown("Interact"))
                         {
+                            Debug.Log("Interacting");
                             _interactables[i].Interact();
                         }
                     }

@@ -5,16 +5,20 @@ using UnityEngine;
 public class InteractableItem : Interactable
 {
     //field for inventory
-    [SerializeField] private Item _item;
+    [SerializeReference] private Item _item;
+    [SerializeField] private GameObject _inventoryManager;
+    private PlayerInventory _playerInventory;
 
     private void Start()
     {
-        _item = gameObject.GetComponent<Item>();
+        
     }
-
     public override void Interact()
     {
         Debug.Log("Inside Interact for InteractableItem");
+        Debug.Log("_item.Name: " + _item.Name + " _item.Description: " + _item.Description);
+        //_playerInventory.AddToInventory(_item);
+        //put this item into inventory here. This is "pick up"
         //Destroy(gameObject);
     }
 }

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - PickUpObject
   - InteractableObject
+  - InventoryManager
   layers:
   - Default
   - TransparentFX

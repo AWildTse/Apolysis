@@ -2,12 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//[CreateAssetMenu(fileName = "New Ranged Weapon", menuName = "Inventory/Ranged Weapon")]
+[CreateAssetMenu(fileName = "New Ranged Weapon", menuName = "Inventory/Weapon/Ranged Weapon")]
 public class RangedWeapon : Weapon
 {
-    public float damage;
+    public float Damage;
+    public int AmmoCapacity;
+    public Ammo AmmoType;
+    public float FireRate;
+    public float Velocity;
+    public float BulletDrop;
+    public float Recoil;
+    public float NoiseLevel;
+    public bool HoldToFire;
+    
     public override void PickUp()
     {
+
     }
     public override void Use()
     {
