@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+using Apolysis.Interfaces;
+using Apolysis.UserInterface;
+
 public class FirstPersonController : MonoBehaviour
 {
     #region Player Instantiation Fields
@@ -415,4 +418,3 @@ public class FirstPersonController : MonoBehaviour
         }
     }
 }
-

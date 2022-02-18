@@ -59,7 +59,7 @@
     <Compile Include="Assets\Scripts\ExperimentalToolTipText.cs" />
     <Compile Include="Assets\Scripts\Inventory\Inventory.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IUnityService.cs" />
-    <Compile Include="Assets\Scripts\Item\IItem.cs" />
+    <Compile Include="Assets\Scripts\Interfaces\IItem.cs" />
     <Compile Include="Assets\Scripts\Interactable\Interactable.cs" />
     <Compile Include="Assets\Scripts\Item\Ammo\Ammo.cs" />
     <Compile Include="Assets\Scripts\Item\Item.cs" />
@@ -67,14 +67,13 @@
     <Compile Include="Assets\Scripts\Item\Usable\Usable.cs" />
     <Compile Include="Assets\Scripts\Inventory\PlayerInventory.cs" />
     <Compile Include="Assets\Scripts\Item\KeyItem.cs" />
-    <Compile Include="Assets\Scripts\Inventory\IInventory.cs" />
+    <Compile Include="Assets\Scripts\Interfaces\IInventory.cs" />
     <Compile Include="Assets\Scripts\Interactable\InteractableItem.cs" />
     <Compile Include="Assets\Scripts\Item\Equipable\Weapon\Weapon.cs" />
     <Compile Include="Assets\Scripts\UI\HealthBar.cs" />
     <Compile Include="Assets\Scripts\UI\StaminaBar.cs" />
-    <Compile Include="Assets\Scripts\Item\Equipable\IEquipable.cs" />
+    <Compile Include="Assets\Scripts\Interfaces\IEquipable.cs" />
     <Compile Include="Assets\Scripts\Interactable\Interactor.cs" />
-    <Compile Include="Assets\Scripts\Item\InventoryItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\JapaneseAlley\README.txt" />

@@ -2,26 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerInventory : Inventory
+using Apolysis.ItemSystem;
+
+namespace Apolysis.InventorySystem
 {
-    [SerializeReference] public List<Item> Inventory;
-    [SerializeReference] public List<InventoryItem> numberOfItems;
+    public class PlayerInventory : Inventory
+    {
+        [SerializeReference] public List<Item> Inventory;
 
-    private void Awake()
-    {
-        Inventory = new List<Item>();
-    }
+        private void Awake()
+        {
 
-    public override void AddToInventory(Item item)
-    {
-        Debug.Log("In AddToInventory");
-        
-        //if exists, add to stack
-        //else, add to inventory
-    }
-    public override void RemoveFromInventory()
-    {
-        //if exists, remove from stack
-        //if last, remove from inventory
+        }
+
+        public override void AddToInventory(Item item)
+        {
+            Debug.Log("In AddToInventory");
+
+            //if exists, add to stack
+            //else, add to inventory
+        }
+        public override void RemoveFromInventory()
+        {
+            //if exists, remove from stack
+            //if last, remove from inventory
+        }
     }
 }

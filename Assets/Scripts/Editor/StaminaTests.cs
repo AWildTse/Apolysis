@@ -4,6 +4,8 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
+using Apolysis.UserInterface;
+
 namespace Editor
 {
     public class StaminaTests

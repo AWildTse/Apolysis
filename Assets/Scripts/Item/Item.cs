@@ -2,15 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using Apolysis.Interfaces;
 
-public abstract class Item : ScriptableObject, IItem
+namespace Apolysis.ItemSystem
 {
-    public string Name;
-    public string Description;
-    public Sprite Icon;
-    public bool IsStackable = false;
-    public int MaxStackAmount;
+    public abstract class Item : ScriptableObject, IItem
+    {
+        public string Name;
+        public string Description;
+        public Sprite Icon;
+        public bool IsStackable = false;
+        public int MaxStackAmount;
 
-    public abstract void PickUp();
-    public abstract void Use();
+        public abstract void PickUp();
+        public abstract void Use();
+    }
 }

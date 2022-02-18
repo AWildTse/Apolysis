@@ -2,6 +2,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+using Apolysis.Interfaces;
+
 public class Player : MonoBehaviour
 {
     public float CurrentHealth { get; set; }
