@@ -74,6 +74,19 @@
     <Compile Include="Assets\Scripts\UI\StaminaBar.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IEquipable.cs" />
     <Compile Include="Assets\Scripts\Interactable\Interactor.cs" />
+    <Compile Include="Assets\Inventory System by NashuaH\Scripts\EditorScripts\AddItemToInventoryEditor.cs" />
+    <Compile Include="Assets\Inventory System by NashuaH\Scripts\Inventory.cs" />
+    <Compile Include="Assets\Inventory System by NashuaH\Scripts\InventorySlot.cs" />
+    <Compile Include="Assets\Inventory System by NashuaH\Scripts\ItemScripts\Weapon.cs" />
+    <Compile Include="Assets\Inventory System by NashuaH\Scripts\ItemScripts\Item.cs" />
+    <Compile Include="Assets\Inventory System by NashuaH\Scripts\ItemInfoUpdate.cs" />
+    <Compile Include="Assets\Inventory System by NashuaH\Scripts\DataScripts\SaveSystem.cs" />
+    <Compile Include="Assets\Inventory System by NashuaH\Scripts\AddItemToInventory.cs" />
+    <Compile Include="Assets\Inventory System by NashuaH\Scripts\EditorScripts\SaveSystemEditor.cs" />
+    <Compile Include="Assets\Inventory System by NashuaH\Scripts\ItemScripts\Resource.cs" />
+    <Compile Include="Assets\Inventory System by NashuaH\Scripts\DataScripts\InventoryData.cs" />
+    <Compile Include="Assets\Inventory System by NashuaH\Scripts\ItemScripts\Consumable.cs" />
+    <Compile Include="Assets\Inventory System by NashuaH\Scripts\EditorScripts\InventoryEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\JapaneseAlley\README.txt" />

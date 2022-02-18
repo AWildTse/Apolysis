@@ -8,7 +8,8 @@ namespace Apolysis.InventorySystem
 {
     public class PlayerInventory : Inventory
     {
-        [SerializeReference] public List<Item> Inventory;
+        [SerializeReference] public List<Item> InventoryList;
+        [SerializeField] public List<int> QuantityList;
 
         private void Awake()
         {
@@ -18,7 +19,65 @@ namespace Apolysis.InventorySystem
         public override void AddToInventory(Item item)
         {
             Debug.Log("In AddToInventory");
+            if (item.IsStackable)
+            {
+                Debug.Log("Item is stackable!");
+                if (InventoryList.Contains(item))
+                {
+                    Debug.Log("Item is already in inventory. Adding to existing item.");
+                    if (QuantityList[InventoryList.IndexOf(item)] != item.MaxStackAmount)
+                    {
+                        QuantityList[InventoryList.IndexOf(item)] = QuantityList[InventoryList.IndexOf(item)] + 1;
+                    }
+                    else
+                    {
+                        if (InventoryList.Count < 9) //temp max storage
+                        {
+                            Debug.Log("Making a new item as long as there is still room in the inventory, current count is: " + InventoryList.Count);
+                            InventoryList.Add(item);
+                            QuantityList.Add(1); //temp how many to add
+                        }
+                        else
+                        {
+                            Debug.Log("You're out of inventory space! Current count is: " + InventoryList.Count);
+                        }
+                    }
+                }
+                else
+                {
 
+                    if (InventoryList.Count < 9) //temp max storage
+                    {
+                        Debug.Log("Making a new item as long as there is still room in the inventory, current count is: " + InventoryList.Count);
+                        InventoryList.Add(item);
+                        QuantityList.Add(1); //temp how many to add
+                    }
+                    else
+                    {
+                        Debug.Log("You're out of inventory space! Current count is: " + InventoryList.Count);
+                    }
+
+                }
+
+            }
+            else
+            {
+                for (int i = 0; i <= 1; i++) //temp how many to add
+                {
+                    if (InventoryList.Count < 9) //temp max storage
+                    {
+                        Debug.Log("Item is not stackable. Adding in as long as there is room in inventory!");
+                        InventoryList.Add(item);
+                        QuantityList.Add(1);
+                    }
+                    else
+                    {
+                        Debug.Log("You're out of inventory space (in not stackable)! Current count is: " + InventoryList.Count);
+                    }
+
+                }
+
+            }
             //if exists, add to stack
             //else, add to inventory
         }
