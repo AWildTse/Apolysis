@@ -11,7 +11,8 @@ namespace Apolysis.InventorySystem
         //Actual Inventory
         [SerializeReference] public List<Item> InventoryList;
         [SerializeField] public List<int> QuantityList;
-        
+        [SerializeField] public int MaxInventory = 5;
+
         //Placeholder to get Count and location of multiple stacks
         [SerializeField] public List<int> Positions;
 
@@ -19,8 +20,13 @@ namespace Apolysis.InventorySystem
         {
 
         }
-        public void test(Item item)
+
+        public override void AddToInventory(Item item)
         {
+            if (InventoryMaxedSlotsFull())
+            {
+                Debug.Log("All slots and stacks are FULL. Cannot add item");
+            }
             if (item.IsStackable)
             {
 
@@ -33,8 +39,7 @@ namespace Apolysis.InventorySystem
                 }
                 if (Positions.Count == 0)
                 {
-                    InventoryList.Add(item);
-                    QuantityList.Add(1);
+                    AddItem(item);
                 }
                 else
                 {
@@ -43,16 +48,22 @@ namespace Apolysis.InventorySystem
                     {
                         if (count == Positions.Count)
                         {
-                            InventoryList.Add(item);
-                            QuantityList.Add(1);
+                            AddItem(item);
                         }
                         if (QuantityList[Positions[i]] == item.MaxStackAmount)
                         {
                             count++;
                             if (count == Positions.Count)
                             {
-                                InventoryList.Add(item);
-                                QuantityList.Add(1);
+                                if (!InventoryMaxedSlotsFull())
+                                {
+                                    AddItem(item);
+                                }
+                                else
+                                {
+                                    Debug.Log("Can't add item to inventory. MAXED SLOTS AND STACKS");
+                                    break;
+                                }
                             }
                             continue;
                         }
@@ -65,20 +76,63 @@ namespace Apolysis.InventorySystem
                     Positions.Clear();
                 }
             }
-            else 
+            else
             {
-                InventoryList.Add(item);
-                QuantityList.Add(1);
+                if (!InventorySlotsFull())
+                {
+                    AddItem(item);
+                }
+                else
+                {
+                    Debug.Log("Can't add item to inventory. MAXED SLOTS");
+                }
             }
         }
-        public override void AddToInventory(Item item)
-        {
-            
-        }
+
         public override void RemoveFromInventory()
         {
             //if exists, remove from stack
             //if last, remove from inventory
+        }
+
+        public void AddItem(Item item)
+        {
+            InventoryList.Add(item);
+            QuantityList.Add(1);
+        }
+
+        public bool InventorySlotsFull()
+        {
+            if (InventoryList.Count == MaxInventory)
+                return true;
+            else
+                return false;
+        }
+
+        public bool InventoryMaxedSlotsFull()
+        {
+            int fullSlots = 0;
+            for (int i = 0; i < InventoryList.Count; i++)
+            {
+                if (InventoryList[i].IsStackable)
+                {
+                    if (QuantityList[i] == InventoryList[i].MaxStackAmount)
+                    {
+                        fullSlots++;
+                    }
+                }
+                else
+                {
+                    fullSlots++;
+                }
+            }
+            if (fullSlots == MaxInventory)
+            {
+                Debug.Log("fullSlots: " + fullSlots);
+                Debug.Log("MaxInventory: " + MaxInventory);
+                return true;
+            }
+            return false;
         }
     }
 }

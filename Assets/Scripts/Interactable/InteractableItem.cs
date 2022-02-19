@@ -21,7 +21,7 @@ namespace Apolysis.InteractableSystem
         }
         public override void Interact()
         {
-            _playerInventory.test(_item);
+            _playerInventory.AddToInventory(_item);
             //put this item into inventory here. This is "pick up"
             //Destroy(gameObject);
         }
