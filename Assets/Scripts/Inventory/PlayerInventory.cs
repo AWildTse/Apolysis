@@ -8,8 +8,13 @@ namespace Apolysis.InventorySystem
 {
     public class PlayerInventory : Inventory
     {
+        //Actual Inventory
         [SerializeReference] public List<Item> InventoryList;
         [SerializeField] public List<int> QuantityList;
+        [SerializeField] public int MaxInventory = 5;
+
+        //Placeholder to get Count and location of multiple stacks
+        [SerializeField] public List<int> Positions;
 
         private void Awake()
         {
@@ -18,73 +23,116 @@ namespace Apolysis.InventorySystem
 
         public override void AddToInventory(Item item)
         {
-            Debug.Log("In AddToInventory");
+            if (InventoryMaxedSlotsFull())
+            {
+                Debug.Log("All slots and stacks are FULL. Cannot add item");
+            }
             if (item.IsStackable)
             {
-                Debug.Log("Item is stackable!");
-                if (InventoryList.Contains(item))
+
+                for (int i = 0; i < InventoryList.Count; i++)
                 {
-                    Debug.Log("Item is already in inventory. Adding to existing item.");
-                    if (QuantityList[InventoryList.IndexOf(item)] != item.MaxStackAmount)
+                    if (InventoryList[i] == item)
                     {
-                        QuantityList[InventoryList.IndexOf(item)] = QuantityList[InventoryList.IndexOf(item)] + 1;
+                        Positions.Add(i);
                     }
-                    else
-                    {
-                        if (InventoryList.Count < 9) //temp max storage
-                        {
-                            Debug.Log("Making a new item as long as there is still room in the inventory, current count is: " + InventoryList.Count);
-                            InventoryList.Add(item);
-                            QuantityList.Add(1); //temp how many to add
-                        }
-                        else
-                        {
-                            Debug.Log("You're out of inventory space! Current count is: " + InventoryList.Count);
-                        }
-                    }
+                }
+                if (Positions.Count == 0)
+                {
+                    AddItem(item);
                 }
                 else
                 {
-
-                    if (InventoryList.Count < 9) //temp max storage
+                    int count = 0;
+                    for (int i = 0; i < Positions.Count; i++)
                     {
-                        Debug.Log("Making a new item as long as there is still room in the inventory, current count is: " + InventoryList.Count);
-                        InventoryList.Add(item);
-                        QuantityList.Add(1); //temp how many to add
+                        if (count == Positions.Count)
+                        {
+                            AddItem(item);
+                        }
+                        if (QuantityList[Positions[i]] == item.MaxStackAmount)
+                        {
+                            count++;
+                            if (count == Positions.Count)
+                            {
+                                if (!InventoryMaxedSlotsFull())
+                                {
+                                    AddItem(item);
+                                }
+                                else
+                                {
+                                    Debug.Log("Can't add item to inventory. MAXED SLOTS AND STACKS");
+                                    break;
+                                }
+                            }
+                            continue;
+                        }
+                        else
+                        {
+                            QuantityList[Positions[i]] = QuantityList[Positions[i]] + 1;
+                            break;
+                        }
                     }
-                    else
-                    {
-                        Debug.Log("You're out of inventory space! Current count is: " + InventoryList.Count);
-                    }
-
+                    Positions.Clear();
                 }
-
             }
             else
             {
-                for (int i = 0; i <= 1; i++) //temp how many to add
+                if (!InventorySlotsFull())
                 {
-                    if (InventoryList.Count < 9) //temp max storage
-                    {
-                        Debug.Log("Item is not stackable. Adding in as long as there is room in inventory!");
-                        InventoryList.Add(item);
-                        QuantityList.Add(1);
-                    }
-                    else
-                    {
-                        Debug.Log("You're out of inventory space (in not stackable)! Current count is: " + InventoryList.Count);
-                    }
-
+                    AddItem(item);
                 }
-
+                else
+                {
+                    Debug.Log("Can't add item to inventory. MAXED SLOTS");
+                }
             }
-            //if exists, add to stack
-            //else, add to inventory
         }
+
         public override void RemoveFromInventory()
         {
             //if exists, remove from stack
             //if last, remove from inventory
+        }
+
+        public void AddItem(Item item)
+        {
+            InventoryList.Add(item);
+            QuantityList.Add(1);
+        }
+
+        public bool InventorySlotsFull()
+        {
+            if (InventoryList.Count == MaxInventory)
+                return true;
+            else
+                return false;
+        }
+
+        public bool InventoryMaxedSlotsFull()
+        {
+            int fullSlots = 0;
+            for (int i = 0; i < InventoryList.Count; i++)
+            {
+                if (InventoryList[i].IsStackable)
+                {
+                    if (QuantityList[i] == InventoryList[i].MaxStackAmount)
+                    {
+                        fullSlots++;
+                    }
+                }
+                else
+                {
+                    fullSlots++;
+                }
+            }
+            if (fullSlots == MaxInventory)
+            {
+                Debug.Log("fullSlots: " + fullSlots);
+                Debug.Log("MaxInventory: " + MaxInventory);
+                return true;
+            }
+            return false;
         }
     }
 }
