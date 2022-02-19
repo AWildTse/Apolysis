@@ -16,11 +16,6 @@ namespace Apolysis.InventorySystem
         //Placeholder to get Count and location of multiple stacks
         [SerializeField] public List<int> Positions;
 
-        private void Awake()
-        {
-
-        }
-
         public override void AddToInventory(Item item)
         {
             if (InventoryMaxedSlotsFull())
