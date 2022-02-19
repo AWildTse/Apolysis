@@ -45,8 +45,8 @@ public class FirstPersonController : MonoBehaviour
     #endregion
 
     #region HealthBar Variables
-    private Image _healthBarImage;
-    private Image _healthBarImageBG;
+    [SerializeField] private Image _healthBarImage;
+    [SerializeField] private Image _healthBarImageBG;
     private HealthBar _healthBar;
     #endregion
 
@@ -65,8 +65,8 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private float _staminaThreshold = 60f;
     private bool _staminaThresholdCheck = false;
     private bool _isSprinting = false;
-    private Image _staminaBarImage;
-    private Image _staminaBarImageBG;
+    [SerializeField] private Image _staminaBarImage;
+    [SerializeField] private Image _staminaBarImageBG;
     private StaminaBar _staminaBar;
     #endregion
 
@@ -123,15 +123,6 @@ public class FirstPersonController : MonoBehaviour
     void Start()
     {
         #region Set Up Variables
-        _placeHolder = gameObject.transform.GetChild(1).GetChild(0).GetChild(0).gameObject;
-        _healthBarImage = _placeHolder.GetComponent<Image>();
-        _placeHolder = gameObject.transform.GetChild(1).GetChild(0).GetChild(1).gameObject;
-        _healthBarImageBG = _placeHolder.GetComponent<Image>();
-        _placeHolder = gameObject.transform.GetChild(1).GetChild(1).GetChild(0).gameObject;
-        _staminaBarImage = _placeHolder.GetComponent<Image>();
-        _placeHolder = gameObject.transform.GetChild(1).GetChild(1).GetChild(1).gameObject;
-        _staminaBarImageBG = _placeHolder.GetComponent<Image>();
-
         _healthBar = new HealthBar(_healthBarImage);
         _staminaBar = new StaminaBar(_staminaBarImage);
         #endregion
