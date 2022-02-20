@@ -5,6 +5,9 @@ using Editor.Infrastructure;
 using UnityEngine.TestTools;
 using System.Collections;
 
+using Apolysis.Interfaces;
+
+
 namespace Editor
 {
     public class FirstPersonControllerTests

@@ -53,9 +53,16 @@
     <UnityVersion>2020.3.25f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Editor\Infrastructure\An.cs" />
     <Compile Include="Assets\Scripts\Editor\FirstPersonControllerTests.cs" />
+    <Compile Include="Assets\Scripts\Editor\Infrastructure\StaminaBarBuilder.cs" />
     <Compile Include="Assets\Scripts\Editor\HealthTests.cs" />
+    <Compile Include="Assets\Scripts\Editor\Infrastructure\ImageBuilder.cs" />
     <Compile Include="Assets\Scripts\Editor\PlayerTests.cs" />
+    <Compile Include="Assets\Scripts\Editor\Infrastructure\TestDataBuilder.cs" />
+    <Compile Include="Assets\Scripts\Editor\Infrastructure\A.cs" />
+    <Compile Include="Assets\Scripts\Editor\Infrastructure\HealthBarBuilder.cs" />
+    <Compile Include="Assets\Scripts\Editor\Infrastructure\PlayerBuilder.cs" />
     <Compile Include="Assets\Scripts\Editor\StaminaTests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -308,8 +315,14 @@
     <Reference Include="log4netPlastic">
       <HintPath>Library\PackageCache\com.unity.collab-proxy@1.15.4\Lib\Editor\PlasticSCM\log4netPlastic.dll</HintPath>
     </Reference>
+    <Reference Include="RainbowCore">
+      <HintPath>Assets\Plugins\RainbowAssets\!Core\Assemblies\RainbowCore.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@2.0.0\Runtime\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RainbowFolders">
+      <HintPath>Assets\Plugins\RainbowAssets\RainbowFolders\Editor\Assemblies\RainbowFolders.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>Library\PackageCache\com.unity.ext.nunit@1.0.6\net35\unity-custom\nunit.framework.dll</HintPath>

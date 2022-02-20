@@ -2,21 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InteractableItem : Interactable
+using Apolysis.InventorySystem;
+using Apolysis.ItemSystem;
+
+namespace Apolysis.InteractableSystem
 {
-    //field for inventory
-
-    //field for Item
-
-    private void Start()
+    public class InteractableItem : Interactable
     {
-        //initialize getComponent to item
-    }
+        //field for inventory
+        [SerializeReference] private Item _item;
+        [SerializeField] private GameObject _inventoryManager;
+        private PlayerInventory _playerInventory;
 
-    public override void Interact()
-    {
-        //pick up code under Item class
-        throw new System.NotImplementedException();
-        
+        private void Start()
+        {
+            _inventoryManager = GameObject.FindWithTag("InventoryManager");
+            _playerInventory = _inventoryManager.GetComponent<PlayerInventory>();
+        }
+        public override void Interact()
+        {
+            _playerInventory.AddToInventory(_item);
+            Destroy(gameObject);
+        }
     }
 }

@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using System;
 using Editor.Infrastructure;
+
 namespace Editor
 {
     public class PlayerTests

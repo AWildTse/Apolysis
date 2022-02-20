@@ -1,20 +1,23 @@
 using UnityEngine;
-public interface IUnityService
-{
-    float GetDeltaTime();
-    float GetAxisRaw(string axisName);
-}
 
-public class UnityService : IUnityService
+namespace Apolysis.Interfaces
 {
-    public float GetDeltaTime()
+    public interface IUnityService
     {
-        return Time.deltaTime;
+        float GetDeltaTime();
+        float GetAxisRaw(string axisName);
     }
 
-    public float GetAxisRaw(string axisName)
+    public class UnityService : IUnityService
     {
-        return Input.GetAxisRaw(axisName);
+        public float GetDeltaTime()
+        {
+            return Time.deltaTime;
+        }
+
+        public float GetAxisRaw(string axisName)
+        {
+            return Input.GetAxisRaw(axisName);
+        }
     }
 }
-
