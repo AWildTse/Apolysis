@@ -1,9 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
 using Apolysis.InteractableSystem;
-using System;
+using Apolysis.InteractableSystem.ToolTip;
 
 namespace Apolysis.InteractorSystem
 {
@@ -21,27 +21,28 @@ namespace Apolysis.InteractorSystem
         private float _rayDistance;
         private Camera _camera;
         private int _interactableLayerMask;
+        [SerializeField] private InteractableToolTip _toolTip;
         [SerializeField] private Text _raycastText;
 
-        public event EventHandler<OnHoverEventArgs> InFocus;
-        public event EventHandler<OffHoverEventArgs> LostFocus;
         #endregion
 
         private void Start()
         {
             _camera = GetComponentInChildren<Camera>();
+            _toolTip = GetComponent<InteractableToolTip>();
 
             _rayDistance = 3f;
             _interactableLayerMask = 1 << 6;
 
             HideTip();
 
-            InFocus += (sender, args) => ShowTip(args.Text);
-            LostFocus += (sender, args) => HideTip();
+            _toolTip.InFocus += (sender, args) => ShowTip(args.Text);
+            _toolTip.LostFocus += (sender, args) => HideTip();
         }
 
         private void Update()
         {
+            _toolTip.NoFocus();
             FindAllNearbyInteractables();
             RayCast();
         }
@@ -139,7 +140,7 @@ namespace Apolysis.InteractorSystem
                         //check nearby interactables to see if any of them match
                         if (interactable.name == _interactables[i].name)
                         {
-                            Focus(interactable.name);
+                            _toolTip.Focus(interactable.name);
                             //We use that object in the list to Interact() if they do match
                             if (Input.GetButtonDown("Interact"))
                             {
@@ -149,21 +150,6 @@ namespace Apolysis.InteractorSystem
                     }
                 }       
             }
-            else
-            {
-                NoFocus();
-            }
-        }
-
-        public void Focus(string text)
-        {
-          if(InFocus != null)
-                InFocus(this, new OnHoverEventArgs(text));
-        }
-        public void NoFocus()
-        {
-            if (LostFocus != null)
-                LostFocus(this, new OffHoverEventArgs());
         }
 
         private void ShowTip(string text)
@@ -176,22 +162,6 @@ namespace Apolysis.InteractorSystem
         {
             _raycastText.text = default;
             _raycastText.enabled = false;
-        }
-    }
-    public class OnHoverEventArgs : EventArgs
-    {
-        public OnHoverEventArgs(string text)
-        {
-            Text = text;
-        }
-        public string Text { get; private set; }
-    }
-
-    public class OffHoverEventArgs : EventArgs
-    {
-        public OffHoverEventArgs()
-        {
-
         }
     }
 }

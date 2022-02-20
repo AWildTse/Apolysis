@@ -87,6 +87,7 @@
     <Compile Include="Assets\Scripts\Interfaces\IEquipable.cs" />
     <Compile Include="Assets\Scripts\Interactable\Interactor.cs" />
     <Compile Include="Assets\Inventory System by NashuaH\Scripts\ItemScripts\Weapon.cs" />
+    <Compile Include="Assets\Scripts\UI\Interactable Hover Tooltip\InteractableToolTip.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\JapaneseAlley\README.txt" />
