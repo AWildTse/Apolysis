@@ -9,10 +9,8 @@ public class InventoryPageUI : MonoBehaviour
     private GameObject _newInventorySlot;
 
     #region Inventory Slot Information
-    private int _resetXPos = 200;
     private int _xPos = 200;
     private const int _incrementAmount = 75;
-    private int _resetYPos = 250;
     private int _yPos = 250;
     private const int _zPos = 0;
     private Vector3 _position;
@@ -27,7 +25,8 @@ public class InventoryPageUI : MonoBehaviour
     #endregion
 
     private void Start()
-    {       
+    {
+        _inventorySlotParent = gameObject.transform;
         CreateInventoryPage();
     }
 

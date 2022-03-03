@@ -69,6 +69,7 @@
     <Compile Include="Assets\Scripts\UI\HealthBar.cs" />
     <Compile Include="Assets\Scripts\UI\StaminaBar.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IEquipable.cs" />
+    <Compile Include="Assets\Scripts\Inventory\InventoryPageUI.cs" />
     <Compile Include="Assets\Scripts\ExperimentalToolTipText.cs" />
     <Compile Include="Assets\Scripts\JawAnimator.cs" />
     <Compile Include="Assets\Scripts\Item\Ammo\Ammo.cs" />
@@ -76,7 +77,6 @@
     <Compile Include="Assets\Scripts\Item\Usable\Usable.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IInventory.cs" />
     <Compile Include="Assets\Scripts\Interactable\Interactor.cs" />
-    <Compile Include="Assets\Scripts\Inventory\InventoryPageUI.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Samples\High Definition RP\10.7.0\Material Samples\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
@@ -284,12 +284,6 @@
     <Reference Include="UnityEngine.XRModule">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2020.3.25f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\Variations\mono\Managed\UnityEngine.XRModule.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.VisualEffectGraph.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualEffectGraph.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="AmplifyShaderEditor">
-      <HintPath>Library\ScriptAssemblies\AmplifyShaderEditor.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.VSCode.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VSCode.Editor.dll</HintPath>
     </Reference>
@@ -298,12 +292,6 @@
     </Reference>
     <Reference Include="Unity.VisualStudio.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VisualStudio.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Searcher.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Searcher.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.RenderPipelines.HighDefinition.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.HighDefinition.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
@@ -314,14 +302,26 @@
     <Reference Include="Unity.Rider.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.ShaderGraph.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.ShaderGraph.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Timeline.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.VisualEffectGraph.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.VisualEffectGraph.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="AmplifyShaderEditor">
+      <HintPath>Library\ScriptAssemblies\AmplifyShaderEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.HighDefinition.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.HighDefinition.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Searcher.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Searcher.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.RenderPipelines.Core.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ShaderGraph.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.ShaderGraph.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@2.0.0\Runtime\AOT\Newtonsoft.Json.dll</HintPath>
@@ -676,14 +676,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="AmplifyShaderEditor.Samples.HDRP.csproj">
-      <Project>{CFF9C140-4C44-50B8-CD75-02C28CCFC998}</Project>
-      <Name>AmplifyShaderEditor.Samples.HDRP</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.VisualEffectGraph.Runtime.csproj">
-      <Project>{6FD32736-F67B-5617-7531-F2CE355C636A}</Project>
-      <Name>Unity.VisualEffectGraph.Runtime</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.Timeline.csproj">
       <Project>{75186EA9-C855-CE05-18A9-94192AFF5E8E}</Project>
       <Name>Unity.Timeline</Name>
@@ -691,6 +683,14 @@
     <ProjectReference Include="Unity.TextMeshPro.csproj">
       <Project>{C39DD42B-5CCC-4FAD-5477-28CB722B6003}</Project>
       <Name>Unity.TextMeshPro</Name>
+    </ProjectReference>
+    <ProjectReference Include="UnityEngine.UI.csproj">
+      <Project>{2683067A-0577-6A46-0B1C-D6A022F1C903}</Project>
+      <Name>UnityEngine.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.VisualEffectGraph.Runtime.csproj">
+      <Project>{6FD32736-F67B-5617-7531-F2CE355C636A}</Project>
+      <Name>Unity.VisualEffectGraph.Runtime</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.HighDefinition.Runtime.csproj">
       <Project>{216EA454-49F7-A449-4268-3B5DD5D20A61}</Project>
@@ -700,21 +700,21 @@
       <Project>{CE9919A7-1B0D-C72D-8905-693CADFB471C}</Project>
       <Name>Unity.RenderPipelines.Core.Runtime</Name>
     </ProjectReference>
+    <ProjectReference Include="Unity.RenderPipelines.HighDefinition.Config.Runtime.csproj">
+      <Project>{7AA3D7DE-1A5A-01EC-8F59-ED124ACDD07D}</Project>
+      <Name>Unity.RenderPipelines.HighDefinition.Config.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="AmplifyShaderEditor.Samples.HDRP.csproj">
+      <Project>{CFF9C140-4C44-50B8-CD75-02C28CCFC998}</Project>
+      <Name>AmplifyShaderEditor.Samples.HDRP</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Core.ShaderLibrary.csproj">
       <Project>{BBCA5FF0-0C13-FC3E-5932-2626F35B4F44}</Project>
       <Name>Unity.RenderPipelines.Core.ShaderLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="UnityEngine.UI.csproj">
-      <Project>{2683067A-0577-6A46-0B1C-D6A022F1C903}</Project>
-      <Name>UnityEngine.UI</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.csproj">
       <Project>{32B12864-AA1F-0317-371B-1ABA84DEE07B}</Project>
       <Name>Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.RenderPipelines.HighDefinition.Config.Runtime.csproj">
-      <Project>{7AA3D7DE-1A5A-01EC-8F59-ED124ACDD07D}</Project>
-      <Name>Unity.RenderPipelines.HighDefinition.Config.Runtime</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

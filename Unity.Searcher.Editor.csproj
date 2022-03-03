@@ -53,15 +53,15 @@
     <UnityVersion>2020.3.25f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Library\PackageCache\com.unity.searcher@4.3.2\Editor\Searcher\SearcherItem.cs" />
-    <Compile Include="Library\PackageCache\com.unity.searcher@4.3.2\Editor\Searcher\SearcherAdapter.cs" />
     <Compile Include="Library\PackageCache\com.unity.searcher@4.3.2\Editor\Searcher\Searcher.cs" />
     <Compile Include="Library\PackageCache\com.unity.searcher@4.3.2\Editor\Searcher\SearcherWindow.cs" />
-    <Compile Include="Library\PackageCache\com.unity.searcher@4.3.2\Editor\Searcher\SearcherDatabaseBase.cs" />
-    <Compile Include="Library\PackageCache\com.unity.searcher@4.3.2\Editor\Searcher\SearcherDatabase.cs" />
     <Compile Include="Library\PackageCache\com.unity.searcher@4.3.2\Editor\Searcher\SearcherControl.cs" />
     <Compile Include="Library\PackageCache\com.unity.searcher@4.3.2\Editor\AssemblyInfo.cs" />
     <Compile Include="Library\PackageCache\com.unity.searcher@4.3.2\Editor\Searcher\SearcherHighlighter.cs" />
+    <Compile Include="Library\PackageCache\com.unity.searcher@4.3.2\Editor\Searcher\SearcherItem.cs" />
+    <Compile Include="Library\PackageCache\com.unity.searcher@4.3.2\Editor\Searcher\SearcherAdapter.cs" />
+    <Compile Include="Library\PackageCache\com.unity.searcher@4.3.2\Editor\Searcher\SearcherDatabaseBase.cs" />
+    <Compile Include="Library\PackageCache\com.unity.searcher@4.3.2\Editor\Searcher\SearcherDatabase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Library\PackageCache\com.unity.searcher@4.3.2\Editor\Unity.Searcher.Editor.asmdef" />
@@ -319,6 +319,9 @@
     <Reference Include="log4netPlastic">
       <HintPath>Library\PackageCache\com.unity.collab-proxy@1.15.4\Lib\Editor\PlasticSCM\log4netPlastic.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.NRefactory">
+      <HintPath>Library\PackageCache\com.unity.render-pipelines.core@10.7.0\Editor\ShaderGenerator\ICSharpCode.NRefactory.dll</HintPath>
+    </Reference>
     <Reference Include="RainbowCore">
       <HintPath>Assets\Plugins\RainbowAssets\!Core\Assemblies\RainbowCore.dll</HintPath>
     </Reference>
@@ -327,9 +330,6 @@
     </Reference>
     <Reference Include="RainbowFolders">
       <HintPath>Assets\Plugins\RainbowAssets\RainbowFolders\Editor\Assemblies\RainbowFolders.dll</HintPath>
-    </Reference>
-    <Reference Include="ICSharpCode.NRefactory">
-      <HintPath>Library\PackageCache\com.unity.render-pipelines.core@10.7.0\Editor\ShaderGenerator\ICSharpCode.NRefactory.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>Library\PackageCache\com.unity.ext.nunit@1.0.6\net35\unity-custom\nunit.framework.dll</HintPath>

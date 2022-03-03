@@ -241,3 +241,9 @@ Temp/UnityTempFile-fe345fc78bf6b2349bf05675efa8c2b3
 Temp/UnityTempFile-ff52513dbce21f04bbe8565a4b30e844
 Temp/
 Logs/shadercompiler-UnityShaderCompiler.exe7.log
+obj/Debug/AmplifyShaderEditor.csproj.AssemblyReference.cache
+obj/Debug/Unity.RenderPipelines.Core.Editor.csproj.AssemblyReference.cache
+obj/Debug/Unity.RenderPipelines.HighDefinition.Config.Runtime.csproj.AssemblyReference.cache
+obj/Debug/Unity.ShaderGraph.Editor.csproj.AssemblyReference.cache
+obj/Debug/Unity.VisualEffectGraph.Runtime.csproj.AssemblyReference.cache
+obj/Debug/UnityEngine.TestRunner.csproj.AssemblyReference.cache
