@@ -333,6 +333,7 @@ public class FirstPersonController : MonoBehaviour
                 _capsuleCollider.height += 0.1f;
                 yield return new WaitForSecondsRealtime(.01f);
             }
+            yield break;
         }
         else
         {
@@ -342,6 +343,7 @@ public class FirstPersonController : MonoBehaviour
                 _capsuleCollider.height -= 0.1f;
                 yield return new WaitForSecondsRealtime(.01f);
             }
+            yield break;
         }
     }
 
