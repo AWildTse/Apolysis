@@ -70,12 +70,13 @@
     <Compile Include="Assets\Scripts\UI\StaminaBar.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IEquipable.cs" />
     <Compile Include="Assets\Scripts\ExperimentalToolTipText.cs" />
+    <Compile Include="Assets\Scripts\JawAnimator.cs" />
     <Compile Include="Assets\Scripts\Item\Ammo\Ammo.cs" />
     <Compile Include="Assets\Scripts\Item\Equipable\Weapon\Melee Weapon\MeleeWeapon.cs" />
     <Compile Include="Assets\Scripts\Item\Usable\Usable.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IInventory.cs" />
     <Compile Include="Assets\Scripts\Interactable\Interactor.cs" />
-    <Compile Include="Assets\Scripts\JawAnimator.cs" />
+    <Compile Include="Assets\Scripts\Inventory\InventoryPageUI.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Samples\High Definition RP\10.7.0\Material Samples\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
