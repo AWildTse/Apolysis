@@ -8,13 +8,6 @@ namespace Apolysis.ItemSystem.Ammunitions
 
     public class Ammo : Item
     {
-        public override void PickUp()
-        {
 
-        }
-        public override void Use()
-        {
-
-        }
     }
 }

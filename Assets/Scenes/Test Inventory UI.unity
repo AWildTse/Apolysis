@@ -709,6 +709,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inventorySlotPrefab: {fileID: 1756287445558537824, guid: 9995a97110d88134f80ec0344afab964, type: 3}
+  _inventorySlotParent: {fileID: 0}
 --- !u!1 &1363325522
 GameObject:
   m_ObjectHideFlags: 0

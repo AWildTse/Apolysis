@@ -6,7 +6,6 @@ namespace Apolysis.Interfaces
 {
     public interface IItem
     {
-        public void PickUp();
-        public void Use();
+
     }
 }

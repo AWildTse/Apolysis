@@ -13,8 +13,5 @@ namespace Apolysis.ItemSystem
         public Sprite Icon;
         public bool IsStackable = false;
         public int MaxStackAmount;
-
-        public abstract void PickUp();
-        public abstract void Use();
     }
 }

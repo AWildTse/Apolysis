@@ -7,13 +7,6 @@ namespace Apolysis.ItemSystem.Usables
     [CreateAssetMenu(fileName = "New Usable Item", menuName = "Inventory/Usable")]
     public class Usable : Item
     {
-        public override void PickUp()
-        {
 
-        }
-        public override void Use()
-        {
-
-        }
     }
 }

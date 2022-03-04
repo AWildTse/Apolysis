@@ -8,14 +8,6 @@ namespace Apolysis.InventorySystem
 {
     public class PlayerInventory : Inventory
     {
-        //Actual Inventory
-        [SerializeReference] public List<Item> InventoryList;
-        [SerializeField] public List<int> QuantityList;
-        [SerializeField] public int MaxInventory = 5;
-
-        //Placeholder to get Count and location of multiple stacks
-        [SerializeField] public List<int> Positions;
-
         public override void AddToInventory(Item item)
         {
             if (InventoryMaxedSlotsFull())

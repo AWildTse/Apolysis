@@ -247,3 +247,6 @@ obj/Debug/Unity.RenderPipelines.HighDefinition.Config.Runtime.csproj.AssemblyRef
 obj/Debug/Unity.ShaderGraph.Editor.csproj.AssemblyReference.cache
 obj/Debug/Unity.VisualEffectGraph.Runtime.csproj.AssemblyReference.cache
 obj/Debug/UnityEngine.TestRunner.csproj.AssemblyReference.cache
+obj/Debug/Assembly-CSharp.csproj.AssemblyReference.cache
+obj/Debug/Assembly-CSharp.Player.csproj.AssemblyReference.cache
+obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
