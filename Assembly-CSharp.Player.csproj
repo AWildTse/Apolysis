@@ -54,6 +54,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Player\FirstPersonController.cs" />
+    <Compile Include="Assets\Scripts\Interfaces\IInteractable.cs" />
     <Compile Include="Assets\Scripts\Item\Equipable\Weapon\Ranged Weapon\RangedWeapon.cs" />
     <Compile Include="Assets\Scripts\Player\Player.cs" />
     <Compile Include="Assets\Scripts\Inventory\Inventory.cs" />
@@ -77,7 +78,6 @@
     <Compile Include="Assets\Scripts\Item\Usable\Usable.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IInventory.cs" />
     <Compile Include="Assets\Scripts\Interactable\Interactor.cs" />
-    <Compile Include="Assets\Scripts\Interfaces\IInteractable.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Samples\High Definition RP\10.7.0\Material Samples\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
@@ -287,9 +287,6 @@
     </Reference>
     <Reference Include="Unity.VisualEffectGraph.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VisualEffectGraph.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="AmplifyShaderEditor">
-      <HintPath>Library\ScriptAssemblies\AmplifyShaderEditor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VSCode.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VSCode.Editor.dll</HintPath>
@@ -677,10 +674,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="AmplifyShaderEditor.Samples.HDRP.csproj">
-      <Project>{CFF9C140-4C44-50B8-CD75-02C28CCFC998}</Project>
-      <Name>AmplifyShaderEditor.Samples.HDRP</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.VisualEffectGraph.Runtime.csproj">
       <Project>{6FD32736-F67B-5617-7531-F2CE355C636A}</Project>
       <Name>Unity.VisualEffectGraph.Runtime</Name>
