@@ -18,14 +18,6 @@ namespace Apolysis.ItemSystem.Weapons
         public float NoiseLevel;
         public bool HoldToFire;
 
-        public override void PickUp()
-        {
-
-        }
-        public override void Use()
-        {
-
-        }
         public override void Equip()
         {
 

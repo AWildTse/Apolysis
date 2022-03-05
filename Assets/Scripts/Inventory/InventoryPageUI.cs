@@ -9,11 +9,9 @@ public class InventoryPageUI : MonoBehaviour
     private GameObject _newInventorySlot;
 
     #region Inventory Slot Information
-    private int _resetXPos = 200;
-    private int _xPos = 200;
+    private int _xPos = 0;
     private const int _incrementAmount = 75;
-    private int _resetYPos = 250;
-    private int _yPos = 250;
+    private int _yPos = 0;
     private const int _zPos = 0;
     private Vector3 _position;
     private const int _startScale = 1;
@@ -27,15 +25,18 @@ public class InventoryPageUI : MonoBehaviour
     #endregion
 
     private void Start()
-    {       
-        CreateInventoryPage();
+    {
+        _inventorySlotParent = gameObject.transform;
+        CreateInventoryPages();
     }
 
-    public void CreateInventoryPage()
+    //Create pages with empty inventory slots. Maybe this should also manage types of inventory pages
+    //Should this handle hiding and showing?
+    public void CreateInventoryPages()
     {
         for (int row = 0; row < _rows; row++)
         {
-            for(int col = 0; col < _columns; col++)
+            for (int col = 0; col < _columns; col++)
             {
                 _inventorySlotPrefab = Instantiate(_inventorySlotPrefab, _position, Quaternion.identity, _inventorySlotParent);
                 _position = new Vector3(_xPos, _yPos, _zPos);
@@ -46,5 +47,17 @@ public class InventoryPageUI : MonoBehaviour
             _yPos = _yPos - _incrementAmount;
         }
         _yPos = _yPos - (_rows * _incrementAmount);
+    }
+
+    //Do we need to be able to save the pages we have, like when we switch scenes?
+    public void SaveInventoryPages()
+    {
+
+    }
+
+    //Everytime an item is added, we call UpdateInventoryPages.
+    public void UpdateInventoryPages()
+    {
+
     }
 }

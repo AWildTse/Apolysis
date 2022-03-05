@@ -9,14 +9,7 @@ namespace Apolysis.ItemSystem.Weapons
     {
         public float Damage;
         public float SwingSpeed;
-        public override void PickUp()
-        {
 
-        }
-        public override void Use()
-        {
-
-        }
         public override void Equip()
         {
 

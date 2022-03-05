@@ -54,6 +54,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Player\FirstPersonController.cs" />
+    <Compile Include="Assets\Scripts\Interfaces\IInteractable.cs" />
     <Compile Include="Assets\Scripts\Item\Equipable\Weapon\Ranged Weapon\RangedWeapon.cs" />
     <Compile Include="Assets\Scripts\Player\Player.cs" />
     <Compile Include="Assets\Scripts\Inventory\Inventory.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Assets\Scripts\UI\HealthBar.cs" />
     <Compile Include="Assets\Scripts\UI\StaminaBar.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IEquipable.cs" />
+    <Compile Include="Assets\Scripts\Inventory\InventoryPageUI.cs" />
     <Compile Include="Assets\Scripts\ExperimentalToolTipText.cs" />
     <Compile Include="Assets\Scripts\JawAnimator.cs" />
     <Compile Include="Assets\Scripts\Item\Ammo\Ammo.cs" />
@@ -76,7 +78,6 @@
     <Compile Include="Assets\Scripts\Item\Usable\Usable.cs" />
     <Compile Include="Assets\Scripts\Interfaces\IInventory.cs" />
     <Compile Include="Assets\Scripts\Interactable\Interactor.cs" />
-    <Compile Include="Assets\Scripts\Inventory\InventoryPageUI.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Samples\High Definition RP\10.7.0\Material Samples\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
@@ -667,17 +668,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="AmplifyShaderEditor.Samples.HDRP.csproj">
-      <Project>{CFF9C140-4C44-50B8-CD75-02C28CCFC998}</Project>
-      <Name>AmplifyShaderEditor.Samples.HDRP</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.VisualEffectGraph.Editor.csproj">
       <Project>{D5766ED2-32BC-A774-360E-2E393180ED9F}</Project>
       <Name>Unity.VisualEffectGraph.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="AmplifyShaderEditor.csproj">
-      <Project>{39EB8FC0-3EA0-0431-730D-DC273DC32F61}</Project>
-      <Name>AmplifyShaderEditor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.VSCode.Editor.csproj">
       <Project>{E9A32500-9E21-B9F2-E4ED-D73AA6451327}</Project>
