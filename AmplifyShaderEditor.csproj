@@ -60,6 +60,7 @@
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Textures\TextureCoordinatesNode.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\ImageEffects\TFHCGrayscale.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Constants.cs" />
+    <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\SRP\HD\ASEDiffusionProfile.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\HelperFuncs\CameraDepthFade.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Operators\SingleInputOp.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Constants\ShaderVariables\FogAndAmbient\FogParamsNode.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Constants\ShaderVariables\Transform\WorldToCameraMatrix.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Version\VersionInfo.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Master\FunctionInput.cs" />
+    <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\SRP\HD\DiffusionProfileNode.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Master\RenderingPlatformsOpHelper.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Vertex\BitangentVertexDataNode.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Operators\AbsOpNode.cs" />
@@ -510,8 +512,6 @@
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\Textures\TFHCFlipBookUVAnimation.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Utils\ASEPackageManagerHelper.cs" />
     <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Templates\TemplateRenderPlatformHelper.cs" />
-    <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\SRP\HD\DiffusionProfileNode.cs" />
-    <Compile Include="Assets\AmplifyShaderEditor\Plugins\Editor\Nodes\SRP\HD\ASEDiffusionProfile.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\AmplifyShaderEditor\Plugins\EditorResources\Previews\Preview_CosTime.shader" />
