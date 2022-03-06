@@ -2,7 +2,7 @@ using UnityEngine.UI;
 
 using Apolysis.UserInterface;
 
-namespace Editor.Infrastructure
+namespace Apolysis.E.Infrastructure
 {
     public class StaminaBarBuilder :TestDataBuilder<StaminaBar>
     {

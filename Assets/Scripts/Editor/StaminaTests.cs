@@ -1,4 +1,4 @@
-using Editor.Infrastructure;
+using Apolysis.E.Infrastructure;
 using NUnit.Framework;
 using System;
 using UnityEngine;
@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 using Apolysis.UserInterface;
 
-namespace Editor
+namespace Apolysis.E
 {
     public class StaminaTests
     {

@@ -1,4 +1,4 @@
-namespace Editor.Infrastructure
+namespace Apolysis.E.Infrastructure
 {
     public static class A 
     {

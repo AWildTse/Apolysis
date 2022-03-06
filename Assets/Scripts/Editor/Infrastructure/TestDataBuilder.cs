@@ -1,5 +1,5 @@
 using UnityEngine;
-namespace Editor.Infrastructure
+namespace Apolysis.E.Infrastructure
 {
     public abstract class TestDataBuilder<T>
     {

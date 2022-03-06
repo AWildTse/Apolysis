@@ -1,14 +1,14 @@
 using NUnit.Framework;
 using UnityEngine;
 using NSubstitute;
-using Editor.Infrastructure;
+using Apolysis.E.Infrastructure;
 using UnityEngine.TestTools;
 using System.Collections;
 
 using Apolysis.Interfaces;
 
 
-namespace Editor
+namespace Apolysis.E
 {
     public class FirstPersonControllerTests
     {

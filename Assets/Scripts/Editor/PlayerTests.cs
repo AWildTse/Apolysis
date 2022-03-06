@@ -1,8 +1,8 @@
 using NUnit.Framework;
 using System;
-using Editor.Infrastructure;
+using Apolysis.E.Infrastructure;
 
-namespace Editor
+namespace Apolysis.E
 {
     public class PlayerTests
     {
