@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace Editor.Infrastructure
+namespace Apolysis.E.Infrastructure
 {
     public class PlayerBuilder : TestDataBuilder<Player>
     {

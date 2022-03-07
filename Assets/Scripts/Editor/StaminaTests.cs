@@ -1,4 +1,4 @@
-using Editor.Infrastructure;
+using Apolysis.E.Infrastructure;
 using NUnit.Framework;
 using System;
 using UnityEngine;
@@ -6,18 +6,19 @@ using UnityEngine.UI;
 
 using Apolysis.UserInterface;
 
-namespace Editor
+namespace E
 {
     public class StaminaTests
     {
         private Image _image;
-        private StaminaBar _staminaBar;
+        private Slider _slider;
+        private StaminaSlider _staminaSlider;
 
         [SetUp]
         public void BeforeEveryTest()
         {
             _image = An.Image();
-            _staminaBar = A.StaminaBar().With(_image);
+            _staminaSlider = A.StaminaSlider().With(_slider);
         }
 
         public class RestoreStaminaMethod : StaminaTests
@@ -27,7 +28,7 @@ namespace Editor
             {
                 _image.fillAmount = 0;
 
-                _staminaBar.RestoreStamina(0);
+                _staminaSlider.RestoreStamina(0);
 
                 Assert.AreEqual(0, _image.fillAmount);
             }
@@ -37,7 +38,7 @@ namespace Editor
             {
                 _image.fillAmount = 0;
 
-                _staminaBar.RestoreStamina(1);
+                _staminaSlider.RestoreStamina(1);
 
                 Assert.AreEqual(0.01f, _image.fillAmount);
             }
@@ -47,7 +48,7 @@ namespace Editor
             {
                 _image.fillAmount = 0.01f;
 
-                _staminaBar.RestoreStamina(24);
+                _staminaSlider.RestoreStamina(24);
 
                 Assert.AreEqual(0.25f, _image.fillAmount);
             }
@@ -55,7 +56,7 @@ namespace Editor
             [Test]
             public void _Throws_Exception_For_Negative_Numbers()
             {
-                Assert.Throws<ArgumentOutOfRangeException>(() => _staminaBar.RestoreStamina(-1));
+                Assert.Throws<ArgumentOutOfRangeException>(() => _staminaSlider.RestoreStamina(-1));
             }
         }
 
@@ -66,7 +67,7 @@ namespace Editor
             {
                 _image.fillAmount = 1;
 
-                _staminaBar.DepleteStamina(0);
+                _staminaSlider.DepleteStamina(0);
 
                 Assert.AreEqual(1, _image.fillAmount);
             }
@@ -76,7 +77,7 @@ namespace Editor
             {
                 _image.fillAmount = 1;
 
-                _staminaBar.DepleteStamina(1);
+                _staminaSlider.DepleteStamina(1);
 
                 Assert.AreEqual(0.99f, _image.fillAmount);
             }
@@ -86,7 +87,7 @@ namespace Editor
             {
                 _image.fillAmount = 0.99f;
 
-                _staminaBar.DepleteStamina(24);
+                _staminaSlider.DepleteStamina(24);
 
                 Assert.AreEqual(0.75f, _image.fillAmount);
             }
@@ -94,7 +95,7 @@ namespace Editor
             [Test]
             public void _Throws_Exception_For_Negative_Numbers()
             {
-                Assert.Throws<ArgumentOutOfRangeException>(() => _staminaBar.DepleteStamina(-1));
+                Assert.Throws<ArgumentOutOfRangeException>(() => _staminaSlider.DepleteStamina(-1));
             }
         }
     }

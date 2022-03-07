@@ -1,31 +1,31 @@
 using UnityEngine.UI;
 using Apolysis.UserInterface;
 
-namespace Editor.Infrastructure
+namespace Apolysis.E.Infrastructure
 {
-    public class HealthBarBuilder :TestDataBuilder<HealthBar>
+    public class HealthSlideBuilder :TestDataBuilder<HealthBar>
     {
-        private Image _image;
+        private Slider _slider;
 
-        public HealthBarBuilder(Image image)
+        public HealthSlideBuilder(Slider slider)
         {
-            _image = image;
+            _slider = slider;
         }
 
-        public HealthBarBuilder() : this(An.Image())
+        public HealthSlideBuilder() : this(A.Slider())
         {
 
         }
         
-        public HealthBarBuilder With(Image image)
+        public HealthSlideBuilder With(Slider slider)
         {
-            _image = image;
+            _slider = slider;
             return this;
         }
 
         public override HealthBar Build()
         {
-            return new HealthBar(_image);
+            return new HealthBar(_slider);
         }
     }
 }

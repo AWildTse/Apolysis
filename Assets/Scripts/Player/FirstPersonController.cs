@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 using Apolysis.Interfaces;
 using Apolysis.UserInterface;
+using TMPro;
 
 public class FirstPersonController : MonoBehaviour
 {
@@ -45,8 +46,8 @@ public class FirstPersonController : MonoBehaviour
     #endregion
 
     #region HealthBar Variables
-    [SerializeField] private Image _healthBarImage;
-    [SerializeField] private Image _healthBarImageBG;
+    [SerializeField] private Slider _healthSliderImage;
+    [SerializeField] private TextMeshProUGUI _healthText;
     private HealthBar _healthBar;
     #endregion
 
@@ -65,9 +66,9 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private float _staminaThreshold = 60f;
     private bool _staminaThresholdCheck = false;
     private bool _isSprinting = false;
-    [SerializeField] private Image _staminaBarImage;
-    [SerializeField] private Image _staminaBarImageBG;
-    private StaminaBar _staminaBar;
+    [SerializeField] private Slider _staminaSliderImage;
+    [SerializeField] private TextMeshProUGUI _staminaText;
+    private StaminaSlider _StaminaSlider;
     #endregion
 
     #region Jumping Variables
@@ -123,15 +124,15 @@ public class FirstPersonController : MonoBehaviour
     void Start()
     {
         #region Set Up Variables
-        _healthBar = new HealthBar(_healthBarImage);
-        _staminaBar = new StaminaBar(_staminaBarImage);
+        _healthBar = new HealthBar(_healthSliderImage);
+        _StaminaSlider = new StaminaSlider(_staminaSliderImage);
         #endregion
 
         #region Set Up EventArgs
         _player.Healed += (sender, args) => _healthBar.ReplenishHealth(args.Amount);
         _player.Damaged += (sender, args) => _healthBar.DepleteHealth(args.Amount);
-        _player.Rested += (sender, args) => _staminaBar.RestoreStamina(args.Amount);
-        _player.Sprinted += (sender, args) => _staminaBar.DepleteStamina(args.Amount);
+        _player.Rested += (sender, args) => _StaminaSlider.RestoreStamina(args.Amount);
+        _player.Sprinted += (sender, args) => _StaminaSlider.DepleteStamina(args.Amount);
         #endregion
 
         if (_unityService == null)
@@ -225,6 +226,8 @@ public class FirstPersonController : MonoBehaviour
             _isSprinting = true;
             _isWalking = false;
             _player.Sprint(_staminaDepleteAmount);
+            _staminaText.text = _player.CurrentStamina.ToString("#");
+            _staminaText.text += "%";
             transform.localPosition += ReturnPosition(_runningSpeed);
         }
         else if (CanPlayerSprint(currentStamina, thresholdCheck, threshold) == false)
@@ -232,12 +235,16 @@ public class FirstPersonController : MonoBehaviour
             _isSprinting = false;
             _isWalking = true;
             _player.Rest(_staminaRestoreAmount);
+            _staminaText.text = _player.CurrentStamina.ToString("#");
+            _staminaText.text += "%";
             transform.localPosition += ReturnPosition(_walkingSpeed);
         }
         else if (currentStamina == maxStamina)
         {
             _isSprinting = false;
             _isWalking = true;
+            _staminaText.text = _player.CurrentStamina.ToString("#");
+            _staminaText.text += "%";
             transform.localPosition += ReturnPosition(_walkingSpeed);
         }
         else if (CanPlayerSprint(currentStamina, thresholdCheck, threshold) == true)
@@ -245,6 +252,8 @@ public class FirstPersonController : MonoBehaviour
             _isSprinting = false;
             _isWalking = true;
             _player.Rest(_staminaRestoreAmount);
+            _staminaText.text = _player.CurrentStamina.ToString("#");
+            _staminaText.text += "%";
             transform.localPosition += ReturnPosition(_walkingSpeed);
         }
     }

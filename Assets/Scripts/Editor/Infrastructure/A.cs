@@ -1,20 +1,25 @@
-namespace Editor.Infrastructure
+using UnityEngine.UI;
+namespace Apolysis.E.Infrastructure
 {
     public static class A 
     {
-        public static HealthBarBuilder HealthBar()
+        public static HealthSlideBuilder HealthSlider()
         {
-            return new HealthBarBuilder();
-        }
-
-        public static StaminaBarBuilder StaminaBar()
-        {
-            return new StaminaBarBuilder();
+            return new HealthSlideBuilder();
         }
 
         public static PlayerBuilder Player()
         {
             return new PlayerBuilder();
+        }
+
+        public static StaminaSlideBuilder StaminaSlider()
+        {
+            return new StaminaSlideBuilder();
+        }
+        public static SlideBuilder Slider()
+        {
+            return new SlideBuilder();
         }
     }
 }

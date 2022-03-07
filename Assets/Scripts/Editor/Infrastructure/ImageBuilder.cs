@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Editor.Infrastructure
+namespace Apolysis.E.Infrastructure
 {
     public class ImageBuilder : TestDataBuilder<Image>
     {

@@ -1,4 +1,4 @@
-using Editor.Infrastructure;
+using Apolysis.E.Infrastructure;
 using NUnit.Framework;
 using System;
 using UnityEngine;
@@ -6,18 +6,19 @@ using UnityEngine.UI;
 
 using Apolysis.UserInterface;
 
-namespace Editor
+namespace E
 {
     public class HealthTests
     {
         private Image _image;
-        private HealthBar _healthBar;
+        private Slider _slider;
+        private HealthBar _healthSlider;
 
         [SetUp]
         public void BeforeEveryTest()
         {
             _image = An.Image();
-            _healthBar = A.HealthBar().With(_image);
+            _healthSlider = A.HealthSlider().With(_slider);
         }
 
         public class ReplenishHealthMethod : HealthTests
@@ -28,7 +29,7 @@ namespace Editor
 
                 _image.fillAmount = 0;
 
-                _healthBar.ReplenishHealth(0);
+                _healthSlider.ReplenishHealth(0);
 
                 Assert.AreEqual(0, _image.fillAmount);
             }
@@ -38,7 +39,7 @@ namespace Editor
             {
                 _image.fillAmount = 0;
 
-                _healthBar.ReplenishHealth(1);
+                _healthSlider.ReplenishHealth(1);
 
                 Assert.AreEqual(0.01f, _image.fillAmount);
             }
@@ -48,7 +49,7 @@ namespace Editor
             {
                 _image.fillAmount = 0.01f;
 
-                _healthBar.ReplenishHealth(24);
+                _healthSlider.ReplenishHealth(24);
 
                 Assert.AreEqual(0.25f, _image.fillAmount);
             }
@@ -56,7 +57,7 @@ namespace Editor
             [Test]
             public void _Throws_Exception_For_Negative_Number_Of_Heart_Pieces()
             {
-                Assert.Throws<ArgumentOutOfRangeException>(() => _healthBar.ReplenishHealth(-1));
+                Assert.Throws<ArgumentOutOfRangeException>(() => _healthSlider.ReplenishHealth(-1));
             }
         }
 
@@ -66,7 +67,7 @@ namespace Editor
             public void _0_Sets_Image_With_100_Percent_Fill_To_100_Percent_Fill()
             {
                 _image.fillAmount = 1;
-                _healthBar.DepleteHealth(0);
+                _healthSlider.DepleteHealth(0);
                 Assert.AreEqual(1, _image.fillAmount);
             }
 
@@ -75,7 +76,7 @@ namespace Editor
             {
                 _image.fillAmount = 1;
 
-                _healthBar.DepleteHealth(1);
+                _healthSlider.DepleteHealth(1);
 
                 Assert.AreEqual(0.99f, _image.fillAmount);
             }
@@ -85,7 +86,7 @@ namespace Editor
             {
                 _image.fillAmount = 0.99f;
 
-                _healthBar.DepleteHealth(24);
+                _healthSlider.DepleteHealth(24);
 
                 Assert.AreEqual(0.75f, _image.fillAmount);
             }
@@ -93,7 +94,7 @@ namespace Editor
             [Test]
             public void _Throws_Exception_For_Negative_Number_Of_Heart_Pieces()
             {
-                Assert.Throws<ArgumentOutOfRangeException>(() => _healthBar.DepleteHealth(-1));
+                Assert.Throws<ArgumentOutOfRangeException>(() => _healthSlider.DepleteHealth(-1));
             }
         }
     }
