@@ -10,14 +10,13 @@ namespace E
 {
     public class HealthTests
     {
-        private Image _image;
         private Slider _slider;
         private HealthBar _healthSlider;
 
         [SetUp]
         public void BeforeEveryTest()
         {
-            _image = An.Image();
+            _slider = A.Slider();
             _healthSlider = A.HealthSlider().With(_slider);
         }
 
@@ -26,32 +25,31 @@ namespace E
             [Test]
             public void _0_Sets_Image_With_0_Percent_Fill_To_0_Percent_Fill()
             {
-
-                _image.fillAmount = 0;
+                _slider.value = 0;
 
                 _healthSlider.ReplenishHealth(0);
 
-                Assert.AreEqual(0, _image.fillAmount);
+                Assert.AreEqual(0, _slider.value);
             }
 
             [Test]
             public void _1_Sets_Image_With_0_Percent_Fill_To_1_Percent_Fill()
             {
-                _image.fillAmount = 0;
+                _slider.value = 0;
 
                 _healthSlider.ReplenishHealth(1);
 
-                Assert.AreEqual(0.01f, _image.fillAmount);
+                Assert.AreEqual(0.01f, _slider.value);
             }
 
             [Test]
             public void _1_Sets_Image_With_1_Percent_Fill_To_25_Percent_Fill()
             {
-                _image.fillAmount = 0.01f;
+                _slider.value = 0.01f;
 
                 _healthSlider.ReplenishHealth(24);
 
-                Assert.AreEqual(0.25f, _image.fillAmount);
+                Assert.AreEqual(0.25f, _slider.value);
             }
 
             [Test]
@@ -66,29 +64,29 @@ namespace E
             [Test]
             public void _0_Sets_Image_With_100_Percent_Fill_To_100_Percent_Fill()
             {
-                _image.fillAmount = 1;
+                _slider.value = 1;
                 _healthSlider.DepleteHealth(0);
-                Assert.AreEqual(1, _image.fillAmount);
+                Assert.AreEqual(1, _slider.value);
             }
 
             [Test]
             public void _1_Sets_Image_With_100_Percent_Fill_To_99_Percent_Fill()
             {
-                _image.fillAmount = 1;
+                _slider.value = 1;
 
                 _healthSlider.DepleteHealth(1);
 
-                Assert.AreEqual(0.99f, _image.fillAmount);
+                Assert.AreEqual(0.99f, _slider.value);
             }
 
             [Test]
             public void _2_Sets_Image_With_99_Percent_To_75_Percent_Fill()
             {
-                _image.fillAmount = 0.99f;
+                _slider.value = 0.99f;
 
                 _healthSlider.DepleteHealth(24);
 
-                Assert.AreEqual(0.75f, _image.fillAmount);
+                Assert.AreEqual(0.75f, _slider.value);
             }
 
             [Test]
