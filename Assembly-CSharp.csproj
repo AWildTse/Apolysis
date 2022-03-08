@@ -125,6 +125,7 @@
     <Compile Include="Assets\Shift - Complete Sci-Fi UI\Scripts\Panel\ServerBrowserManager.cs" />
     <Compile Include="Assets\Shift - Complete Sci-Fi UI\Scripts\Buttons\MainButton.cs" />
     <Compile Include="Assets\Shift - Complete Sci-Fi UI\Scripts\UI Element\UIElementSound.cs" />
+    <Compile Include="Assets\Scripts\UI\ObjectivesList.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Samples\High Definition RP\10.7.0\Material Samples\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
