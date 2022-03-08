@@ -2392,7 +2392,7 @@ MonoBehaviour:
   _runningSpeed: 4
   _crouchingSpeedMultiplier: 1
   _healthAmount: 10
-  _staminaDepleteAmount: 0.04
+  _staminaDepleteAmount: 10
   _staminaRestoreAmount: 0.02
   _horizontalMouseSensitivity: 1
   _verticalMouseSensitivity: 1

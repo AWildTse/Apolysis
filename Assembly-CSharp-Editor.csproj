@@ -55,20 +55,20 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Editor\FirstPersonControllerTests.cs" />
     <Compile Include="Assets\Scripts\Editor\HealthTests.cs" />
+    <Compile Include="Assets\Scripts\Editor\Infrastructure\SlideBuilder.cs" />
     <Compile Include="Assets\Scripts\Editor\Infrastructure\ImageBuilder.cs" />
+    <Compile Include="Assets\Scripts\Editor\Infrastructure\StaminaSlideBuilder.cs" />
     <Compile Include="Assets\Scripts\Editor\Infrastructure\TestDataBuilder.cs" />
     <Compile Include="Assets\Scripts\Editor\Infrastructure\A.cs" />
     <Compile Include="Assets\Scripts\Editor\Infrastructure\PlayerBuilder.cs" />
+    <Compile Include="Assets\Shift - Complete Sci-Fi UI\Editor\Scripts\UIManagerEditor.cs" />
     <Compile Include="Assets\Scripts\Editor\StaminaTests.cs" />
     <Compile Include="Assets\Scripts\Editor\Infrastructure\An.cs" />
-    <Compile Include="Assets\Scripts\Editor\PlayerTests.cs" />
-    <Compile Include="Assets\Scripts\Editor\Infrastructure\HealthBarBuilder.cs" />
     <Compile Include="Assets\Shift - Complete Sci-Fi UI\Editor\Scripts\ToolsMenu.cs" />
-    <Compile Include="Assets\Shift - Complete Sci-Fi UI\Editor\Scripts\InitShiftUI.cs" />
-    <Compile Include="Assets\Shift - Complete Sci-Fi UI\Editor\Scripts\UIManagerEditor.cs" />
+    <Compile Include="Assets\Scripts\Editor\PlayerTests.cs" />
+    <Compile Include="Assets\Scripts\Editor\Infrastructure\HealthSlideBuilder.cs" />
     <Compile Include="Assets\Shift - Complete Sci-Fi UI\Editor\Scripts\ExtendedColorPicker.cs" />
-    <Compile Include="Assets\Scripts\Editor\Infrastructure\StaminaSlideBuilder.cs" />
-    <Compile Include="Assets\Scripts\Editor\Infrastructure\SlideBuilder.cs" />
+    <Compile Include="Assets\Shift - Complete Sci-Fi UI\Editor\Scripts\InitShiftUI.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

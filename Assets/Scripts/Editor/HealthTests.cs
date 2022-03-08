@@ -11,7 +11,7 @@ namespace E
     public class HealthTests
     {
         private Slider _slider;
-        private HealthBar _healthSlider;
+        private HealthSlider _healthSlider;
 
         [SetUp]
         public void BeforeEveryTest()

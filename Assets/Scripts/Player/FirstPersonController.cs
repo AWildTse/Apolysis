@@ -45,16 +45,17 @@ public class FirstPersonController : MonoBehaviour
     public bool CameraCanMove { get; private set; } = true;
     #endregion
 
-    #region HealthBar Variables
+    #region HealthSlider Variables
     [SerializeField] private Slider _healthSliderImage;
     [SerializeField] private TextMeshProUGUI _healthText;
-    private HealthBar _healthBar;
+    private HealthSlider _healthSlider;
     #endregion
 
     #region Movement Variables
     private Vector3 _oldPosition;
     private Vector3 _newPosition;
     private bool _isWalking = true;
+    private bool _isMoving = false;
     private bool _positionCoroutineStarted = false;
     public bool PlayerCanMove { get; private set; } = true;
 
@@ -124,13 +125,13 @@ public class FirstPersonController : MonoBehaviour
     void Start()
     {
         #region Set Up Variables
-        _healthBar = new HealthBar(_healthSliderImage);
+        _healthSlider = new HealthSlider(_healthSliderImage);
         _StaminaSlider = new StaminaSlider(_staminaSliderImage);
         #endregion
 
         #region Set Up EventArgs
-        _player.Healed += (sender, args) => _healthBar.ReplenishHealth(args.Amount);
-        _player.Damaged += (sender, args) => _healthBar.DepleteHealth(args.Amount);
+        _player.Healed += (sender, args) => _healthSlider.ReplenishHealth(args.Amount);
+        _player.Damaged += (sender, args) => _healthSlider.DepleteHealth(args.Amount);
         _player.Rested += (sender, args) => _StaminaSlider.RestoreStamina(args.Amount);
         _player.Sprinted += (sender, args) => _StaminaSlider.DepleteStamina(args.Amount);
         #endregion
@@ -195,33 +196,46 @@ public class FirstPersonController : MonoBehaviour
 
     public void PlayerMovement()
     {
-        DecideSpeed(_player.CurrentStamina, _player.MaximumStamina, _staminaThresholdCheck, _staminaThreshold);
+        DecideSpeed();
     }
 
-    public bool CanPlayerSprint(float stamina, bool thresholdCheck, float threshold)
+    public bool CanPlayerSprint()
     {
-        if (stamina == 0)
+        //First we want to make sure if stamina gets as low as 0, we immediately set the check to true
+        if (_player.CurrentStamina == 0)
         {
-            thresholdCheck = true;
+            _staminaThresholdCheck = true;
             return false;
         }
-        if (stamina < threshold && thresholdCheck == true)
+
+        //Next, we want to check if the current stamina is less than the set threshold
+        //If we've reached 0 causing thresholdCheck to be true, we'll make sure we can't sprint
+        if (_player.CurrentStamina < _staminaThreshold && _staminaThresholdCheck)
         {
             return false;
         }
-        if (stamina >= threshold)
+
+        //Because we check these three states in this order, by the time stamina is greater than
+        //threshold, this means we can set thresholdCheck to false and enable sprinting.
+        if (_player.CurrentStamina >= _staminaThreshold)
         {
-            thresholdCheck = false;
+            _staminaThresholdCheck = false;
             return true;
         }
-        thresholdCheck = false;
-        return true;
+
+        if(_player.CurrentStamina > 0 && !_staminaThresholdCheck)
+        {
+            return true;
+        }
+        return false;
     }
 
-    public void DecideSpeed(float currentStamina, float maxStamina, bool thresholdCheck, float threshold)
+    public void DecideSpeed()
     {
         bool sprint = Input.GetButton("Sprint");
-        if (sprint && (CanPlayerSprint(currentStamina, thresholdCheck, threshold) == true))
+
+        //Player is allowed to sprint if holding the bool, if all the checks are passed, and is moving
+        if (sprint && (CanPlayerSprint()) && _isMoving)
         {
             _isSprinting = true;
             _isWalking = false;
@@ -230,7 +244,9 @@ public class FirstPersonController : MonoBehaviour
             _staminaText.text += "%";
             transform.localPosition += ReturnPosition(_runningSpeed);
         }
-        else if (CanPlayerSprint(currentStamina, thresholdCheck, threshold) == false)
+
+        //if the player is not currently allowed to sprint, we're just walking and recovering
+        else if (!CanPlayerSprint())
         {
             _isSprinting = false;
             _isWalking = true;
@@ -239,7 +255,9 @@ public class FirstPersonController : MonoBehaviour
             _staminaText.text += "%";
             transform.localPosition += ReturnPosition(_walkingSpeed);
         }
-        else if (currentStamina == maxStamina)
+
+        //current = max means we don't have to rest
+        else if (_player.CurrentStamina == _player.MaximumStamina)
         {
             _isSprinting = false;
             _isWalking = true;
@@ -247,7 +265,9 @@ public class FirstPersonController : MonoBehaviour
             _staminaText.text += "%";
             transform.localPosition += ReturnPosition(_walkingSpeed);
         }
-        else if (CanPlayerSprint(currentStamina, thresholdCheck, threshold) == true)
+
+        //edge case if we're not sprinting but able to, we can still recover
+        else if (CanPlayerSprint())
         {
             _isSprinting = false;
             _isWalking = true;
@@ -361,7 +381,14 @@ public class FirstPersonController : MonoBehaviour
         _positionCoroutineStarted = true;
 
         _newPosition = transform.localPosition;
-
+        if(_newPosition == _oldPosition)
+        {
+            _isMoving = false;
+        }
+        else
+        {
+            _isMoving = true;
+        }
         yield return new WaitForSecondsRealtime(.01f);
 
         _oldPosition = _newPosition;

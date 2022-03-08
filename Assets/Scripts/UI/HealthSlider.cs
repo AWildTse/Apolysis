@@ -3,11 +3,11 @@ using UnityEngine.UI;
 
 namespace Apolysis.UserInterface
 {
-    public class HealthBar
+    public class HealthSlider
     {
         private const float _fillPercentage = 0.01f;
         private Slider _slider;
-        public HealthBar(Slider slider)
+        public HealthSlider(Slider slider)
         {
             _slider = slider;
         }

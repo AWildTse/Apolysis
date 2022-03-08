@@ -3,7 +3,7 @@ using Apolysis.UserInterface;
 
 namespace Apolysis.E.Infrastructure
 {
-    public class HealthSlideBuilder :TestDataBuilder<HealthBar>
+    public class HealthSlideBuilder :TestDataBuilder<HealthSlider>
     {
         private Slider _slider;
 
@@ -23,9 +23,9 @@ namespace Apolysis.E.Infrastructure
             return this;
         }
 
-        public override HealthBar Build()
+        public override HealthSlider Build()
         {
-            return new HealthBar(_slider);
+            return new HealthSlider(_slider);
         }
     }
 }
