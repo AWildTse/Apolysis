@@ -7,13 +7,13 @@ using Apolysis.Interfaces;
 using Apolysis.UserInterface;
 using TMPro;
 
-public class FirstPersonController : MonoBehaviour
+public class FirstPersonController : Player
 {
     #region Player Instantiation Fields
     [Header("Player Instantiation Fields")]
-    [SerializeField] private int _currentHP = 100;
+    [SerializeField] public int CurrentHP = 100;
     [SerializeField] private int _maximumHP = 100;
-    [SerializeField] private int _currentSP = 100;
+    [SerializeField] public int CurrentSP = 100;
     [SerializeField] private int _maximumSP = 100;
     [SerializeField] private int _walkingSpeed = 2;
     [SerializeField] private int _runningSpeed = 4;
@@ -65,7 +65,7 @@ public class FirstPersonController : MonoBehaviour
     [Tooltip("The percentage out of 100 before player can sprint again if Out Of Energy")]
     [Range(1, 100)]
     [SerializeField] private float _staminaThreshold = 60f;
-    private bool _staminaThresholdCheck = false;
+    public bool _staminaThresholdCheck = false;
     private bool _isSprinting = false;
     [SerializeField] private Slider _staminaSliderImage;
     [SerializeField] private TextMeshProUGUI _staminaText;
@@ -112,7 +112,7 @@ public class FirstPersonController : MonoBehaviour
         #endregion
 
         #region Initializing Variables
-        _player = new Player(_currentHP, _maximumHP, _currentSP, _maximumSP, _walkingSpeed, _runningSpeed, _crouchingSpeedMultiplier);
+        _player = new Player(CurrentHP, _maximumHP, CurrentSP, _maximumSP, _walkingSpeed, _runningSpeed, _crouchingSpeedMultiplier);
         _rigidbody = GetComponent<Rigidbody>();
         _camera = GetComponentInChildren<Camera>();
         _capsuleCollider = GetComponent<CapsuleCollider>();

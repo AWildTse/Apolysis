@@ -6,6 +6,7 @@ using Apolysis.Interfaces;
 
 public class Player : MonoBehaviour
 {
+    #region Public Getters
     public float CurrentHealth { get; set; }
     public float MaximumHealth { get; set; }
     public float CurrentStamina { get; set; }
@@ -13,14 +14,18 @@ public class Player : MonoBehaviour
     public float WalkingSpeed { get; set; }
     public float RunningSpeed { get; set; }
     public float CrouchingSpeed { get; set; }
+    #endregion
 
+    #region Eventhandlers
     public event EventHandler<HealedEventArgs> Healed;
     public event EventHandler<DamagedEventArgs> Damaged;
     public event EventHandler<RestedEventArgs> Rested;
     public event EventHandler<SprintedEventArgs> Sprinted;
+    #endregion
 
     public IUnityService UnityService;
 
+    #region Constructor
     public Player(float currentHealth = 100, float maximumHealth = 100, float currentStamina = 100, float maximumStamina = 100, float walkingSpeed = 2, float runningSpeed = 4, float crouchingSpeed = 1)
     {
         //Check for health range exceptions
@@ -41,6 +46,7 @@ public class Player : MonoBehaviour
         RunningSpeed = runningSpeed;
         CrouchingSpeed = crouchingSpeed;
     }
+    #endregion
 
     private void Start()
     {
@@ -81,7 +87,7 @@ public class Player : MonoBehaviour
     }
 }
 
-
+#region Eventargs
 public class HealedEventArgs : EventArgs
 {
     public HealedEventArgs(float amount)
@@ -117,3 +123,4 @@ public class SprintedEventArgs : EventArgs
     }
     public float Amount { get; private set; }
 }
+#endregion
