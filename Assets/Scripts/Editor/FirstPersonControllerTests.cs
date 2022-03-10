@@ -95,55 +95,63 @@ namespace E
             public void Check_If_Sprinting_Is_Okay_At_Full_Stamina()
             {
                 currentStamina = 100;
-                FPC.CurrentSP = currentStamina;
+                FPC.CurrentStamina = currentStamina;
                 thresholdCheck = false;
                 FPC._staminaThresholdCheck = thresholdCheck;
+
                 Assert.AreEqual(true, FPC.CanPlayerSprint());
             }
-            //    [Test]
-            //    public void Check_If_Sprinting_Is_Okay_Above_0()
-            //    {
-            //        currentStamina = 1;
-            //        FPC.CurrentSP = currentStamina;
-            //        thresholdCheck = false;
-            //        Assert.AreEqual(true, FPC.CanPlayerSprint());
-            //    }
-            //    [Test]
-            //    public void Check_If_Sprinting_Is_Okay_At_0()
-            //    {
-            //        currentStamina = 0;
-            //        FPC.CurrentSP = currentStamina;
-            //        thresholdCheck = true;
-            //        Assert.AreEqual(false, FPC.CanPlayerSprint());
-            //    }
-            //    [Test]
-            //    public void Check_If_Sprinting_Is_Okay_At_50_After_Capping()
-            //    {
-            //        currentStamina = 50;
-            //        FPC.CurrentSP = currentStamina;
-            //        thresholdCheck = true;
+            [Test]
+            public void Check_If_Sprinting_Is_Okay_Above_0()
+            {
+                currentStamina = 1;
+                FPC.CurrentStamina = currentStamina;
+                thresholdCheck = false;
+                FPC._staminaThresholdCheck = thresholdCheck;
 
-            //        Assert.AreEqual(false, FPC.CanPlayerSprint());
-            //    }
-            //    [Test]
-            //    public void Check_If_Sprinting_Is_Okay_At_60_After_Capping()
-            //    {
-            //        currentStamina = 60;
-            //        thresholdCheck = false;
-            //        Assert.AreEqual(true, FPC.CanPlayerSprint());
-            //    }
-            //}
+                Assert.AreEqual(true, FPC.CanPlayerSprint());
+            }
+            [Test]
+            public void Check_If_Sprinting_Is_Okay_At_0()
+            {
+                currentStamina = 0;
+                FPC.CurrentStamina = currentStamina;
+                thresholdCheck = true;
+                FPC._staminaThresholdCheck = thresholdCheck;
 
-            //public class CanPlayerActTests
-            //{
-            //    private FirstPersonController FPC;
+                Assert.AreEqual(false, FPC.CanPlayerSprint());
+            }
+            [Test]
+            public void Check_If_Sprinting_Is_Okay_At_50_After_Capping()
+            {
+                currentStamina = 50;
+                FPC.CurrentStamina = currentStamina;
+                thresholdCheck = true;
+                FPC._staminaThresholdCheck = thresholdCheck;
 
-            //    [SetUp]
-            //    public void beforeEveryTest()
-            //    {
-            //        FPC = new GameObject().AddComponent<FirstPersonController>();
-            //    }
-            //}
+                Assert.AreEqual(false, FPC.CanPlayerSprint());
+            }
+            [Test]
+            public void Check_If_Sprinting_Is_Okay_At_60_After_Capping()
+            {
+                currentStamina = 60;
+                FPC.CurrentStamina = currentStamina;
+                thresholdCheck = false;
+                FPC._staminaThresholdCheck = thresholdCheck;
+
+                Assert.AreEqual(true, FPC.CanPlayerSprint());
+            }
+        }
+
+        public class CanPlayerActTests
+        {
+            private FirstPersonController FPC;
+
+            [SetUp]
+            public void beforeEveryTest()
+            {
+                FPC = new GameObject().AddComponent<FirstPersonController>();
+            }
         }
     }
 }

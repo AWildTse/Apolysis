@@ -130,10 +130,10 @@ public class FirstPersonController : Player
         #endregion
 
         #region Set Up EventArgs
-        _player.Healed += (sender, args) => _healthSlider.ReplenishHealth(args.Amount);
-        _player.Damaged += (sender, args) => _healthSlider.DepleteHealth(args.Amount);
-        _player.Rested += (sender, args) => _StaminaSlider.RestoreStamina(args.Amount);
-        _player.Sprinted += (sender, args) => _StaminaSlider.DepleteStamina(args.Amount);
+        Healed += (sender, args) => _healthSlider.ReplenishHealth(args.Amount);
+        Damaged += (sender, args) => _healthSlider.DepleteHealth(args.Amount);
+        Rested += (sender, args) => _StaminaSlider.RestoreStamina(args.Amount);
+        Sprinted += (sender, args) => _StaminaSlider.DepleteStamina(args.Amount);
         #endregion
 
         if (_unityService == null)
@@ -202,7 +202,7 @@ public class FirstPersonController : Player
     public bool CanPlayerSprint()
     {
         //First we want to make sure if stamina gets as low as 0, we immediately set the check to true
-        if (_player.CurrentStamina == 0)
+        if (CurrentStamina == 0)
         {
             _staminaThresholdCheck = true;
             return false;
@@ -210,20 +210,20 @@ public class FirstPersonController : Player
 
         //Next, we want to check if the current stamina is less than the set threshold
         //If we've reached 0 causing thresholdCheck to be true, we'll make sure we can't sprint
-        if (_player.CurrentStamina < _staminaThreshold && _staminaThresholdCheck)
+        if (CurrentStamina < _staminaThreshold && _staminaThresholdCheck)
         {
             return false;
         }
 
         //Because we check these three states in this order, by the time stamina is greater than
         //threshold, this means we can set thresholdCheck to false and enable sprinting.
-        if (_player.CurrentStamina >= _staminaThreshold)
+        if (CurrentStamina >= _staminaThreshold)
         {
             _staminaThresholdCheck = false;
             return true;
         }
 
-        if(_player.CurrentStamina > 0 && !_staminaThresholdCheck)
+        if(CurrentStamina > 0 && !_staminaThresholdCheck)
         {
             return true;
         }
@@ -239,8 +239,8 @@ public class FirstPersonController : Player
         {
             _isSprinting = true;
             _isWalking = false;
-            _player.Sprint(_staminaDepleteAmount);
-            _staminaText.text = _player.CurrentStamina.ToString("#");
+            Sprint(_staminaDepleteAmount);
+            _staminaText.text = CurrentStamina.ToString("#");
             _staminaText.text += "%";
             transform.localPosition += ReturnPosition(_runningSpeed);
         }
@@ -250,18 +250,18 @@ public class FirstPersonController : Player
         {
             _isSprinting = false;
             _isWalking = true;
-            _player.Rest(_staminaRestoreAmount);
-            _staminaText.text = _player.CurrentStamina.ToString("#");
+            Rest(_staminaRestoreAmount);
+            _staminaText.text = CurrentStamina.ToString("#");
             _staminaText.text += "%";
             transform.localPosition += ReturnPosition(_walkingSpeed);
         }
 
         //current = max means we don't have to rest
-        else if (_player.CurrentStamina == _player.MaximumStamina)
+        else if (CurrentStamina == MaximumStamina)
         {
             _isSprinting = false;
             _isWalking = true;
-            _staminaText.text = _player.CurrentStamina.ToString("#");
+            _staminaText.text = CurrentStamina.ToString("#");
             _staminaText.text += "%";
             transform.localPosition += ReturnPosition(_walkingSpeed);
         }
@@ -271,8 +271,8 @@ public class FirstPersonController : Player
         {
             _isSprinting = false;
             _isWalking = true;
-            _player.Rest(_staminaRestoreAmount);
-            _staminaText.text = _player.CurrentStamina.ToString("#");
+            Rest(_staminaRestoreAmount);
+            _staminaText.text = CurrentStamina.ToString("#");
             _staminaText.text += "%";
             transform.localPosition += ReturnPosition(_walkingSpeed);
         }
@@ -433,14 +433,14 @@ public class FirstPersonController : Player
         //hard code input to test damage and healing
         if (Input.GetKeyDown(KeyCode.C))
         {
-            Debug.Log("CurrentHealth: " + _player.CurrentHealth);
+            Debug.Log("CurrentHealth: " + CurrentHealth);
 
             _player.Heal(_healthAmount);
 
         }
         if (Input.GetKeyDown(KeyCode.V))
         {
-            Debug.Log("CurrentHealth: " + _player.CurrentHealth);
+            Debug.Log("CurrentHealth: " + CurrentHealth);
 
             _player.Damage(_healthAmount);
 
